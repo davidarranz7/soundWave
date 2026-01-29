@@ -2,6 +2,8 @@ package modelo.usuarios;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import enums.TipoSuscripcion;
 import modelo.contenido.Contenido;
 import modelo.plataforma.Playlist;
 
@@ -10,19 +12,21 @@ public abstract class  Usuario {
     private String nombre;
     private String email;
     private String password;
+    private TipoSuscripcion suscripcion;
     private ArrayList<Playlist> misPlaylists;
     private ArrayList<Contenido> contenidos;
     private LocalDate fechaRegistro;
 
 
-    public Usuario(String id, String nombre, String email, String password) {
+    public Usuario(String id, String nombre, String email, String password, TipoSuscripcion suscripcion, ArrayList<Playlist> misPlaylists, ArrayList<Contenido> contenidos, LocalDate fechaRegistro) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
         this.password = password;
-        this.misPlaylists = new ArrayList<>();
-        this.contenidos = new ArrayList<>();
-        this.fechaRegistro = LocalDate.now();
+        this.suscripcion = suscripcion;
+        this.misPlaylists = misPlaylists;
+        this.contenidos = contenidos;
+        this.fechaRegistro = fechaRegistro;
     }
 
     public String getId() {
@@ -49,20 +53,12 @@ public abstract class  Usuario {
         this.contenidos.add(contenidos);
     }
 
-    public ArrayList<Playlist> getPlaylists() {
+    public ArrayList<Playlist> getMisPlaylists() {
         return misPlaylists;
     }
 
-    public void addPlaylists(Playlist playlists) {
-        this.misPlaylists.add(playlists);
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void addMisPlaylists(Playlist misPlaylists) {
+        this.misPlaylists.add(misPlaylists);
     }
 
     public String getPassword() {
@@ -80,6 +76,23 @@ public abstract class  Usuario {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public TipoSuscripcion getSuscripcion() {
+        return suscripcion;
+    }
+
+    public void setSuscripcion(TipoSuscripcion suscripcion) {
+        this.suscripcion = suscripcion;
+    }
+
     public abstract void reproducir(Contenido contenido);
 
     Playlist crearPlaylist(String nombre){
@@ -96,7 +109,11 @@ public abstract class  Usuario {
     }
 
     boolean validarEmail(){return true;}
+
+
     boolean validarPassword(){return true;}
+
+
 
     void agregarAlHistorial(Contenido contenido){}
 

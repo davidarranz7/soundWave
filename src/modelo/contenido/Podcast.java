@@ -1,12 +1,15 @@
 package modelo.contenido;
 
 import enums.CategoriaPodcast;
+import interfaces.IDescargable;
+import interfaces.IRecomendador;
+import interfaces.IReproducible;
 import modelo.artistas.Creador;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Podcast extends Contenido {
+public class Podcast extends Contenido implements IDescargable, IReproducible {
 
     private Creador creador;
     private int numeroEpisodio;
@@ -36,12 +39,12 @@ public class Podcast extends Contenido {
         this.creador = creador;
     }
 
-    public ArrayList<String> getInvitados() {
+    public ArrayList<String> getInvitado() {
         return invitado;
     }
 
-    public void setInvitados(String invitados) {
-        this.invitado.add(invitados);
+    public void addInvitado(String invitado) {
+        this.invitado.add(invitado);
     }
 
     public CategoriaPodcast getCategoriaPodcast() {
@@ -87,5 +90,53 @@ public class Podcast extends Contenido {
     @Override
     void reproducir() {
 
+    }
+
+    String obtenerDescripcion(){
+        return descripcion;
+    }
+
+    void agregarInvitado(String nombreInvitado) {
+
+    }
+
+    boolean esTemporadaNueva(){
+        return false;
+    }
+
+
+    @Override
+    public boolean descargar(Contenido contenido) {
+        return false;
+    }
+
+    @Override
+    public boolean eliminarDescarga(Contenido contenido) {
+        return false;
+    }
+
+    @Override
+    public int espacioRequerido() {
+        return 0;
+    }
+
+    @Override
+    public void play() {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public int getDuracion() {
+        return 0;
     }
 }

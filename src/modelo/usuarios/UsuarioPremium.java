@@ -1,18 +1,23 @@
 package modelo.usuarios;
+import enums.TipoSuscripcion;
+import interfaces.IDescargable;
 import modelo.contenido.Contenido;
+import modelo.plataforma.Playlist;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class UsuarioPremium extends Usuario {
+public class UsuarioPremium extends Usuario implements IDescargable{
     private boolean descargasOffline;
     private int maxDescargas;
     private ArrayList<Contenido>descargados;
     private String calidadAudio;
 
-    public UsuarioPremium(String id, String nombre, String email, String password, boolean descargasOffline, String calidadAudio, ArrayList<Contenido> descargados, int maxDescargas) {
-        super(id, nombre, email, password);
+    public UsuarioPremium(String id, String nombre, String email, String password, TipoSuscripcion suscripcion, ArrayList<Playlist> misPlaylists, ArrayList<Contenido> contenidos, LocalDate fechaRegistro, boolean descargasOffline, String calidadAudio, ArrayList<Contenido> descargados, int maxDescargas) {
+        super(id, nombre, email, password, suscripcion, misPlaylists, contenidos, fechaRegistro);
         this.descargasOffline = descargasOffline;
         this.calidadAudio = calidadAudio;
-        this.descargados = descargados;
+        this.descargados = new ArrayList<>();
         this.maxDescargas = maxDescargas;
     }
 
@@ -48,20 +53,30 @@ public class UsuarioPremium extends Usuario {
         this.maxDescargas = maxDescargas;
     }
 
-    void descargar(Contenido contenido){
-
-    }
-    void eliminarDescarga(Contenido contenido){
-
-    }
-    boolean vereficarEspacio(){
-        return true;
-    }
-
 
 
     @Override
     public void reproducir(Contenido contenido) {
 
+    }
+
+    boolean vereficarEspacio(){
+    return true;
+    }
+
+
+    @Override
+    public boolean descargar(Contenido contenido) {
+        return false;
+    }
+
+    @Override
+    public boolean eliminarDescarga(Contenido contenido) {
+        return false;
+    }
+
+    @Override
+    public int espacioRequerido() {
+        return 0;
     }
 }
