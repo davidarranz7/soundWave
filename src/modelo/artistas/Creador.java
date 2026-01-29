@@ -90,8 +90,8 @@ public class Creador {
         return categoriaPodcasts;
     }
 
-    public void setCategoriaPodcasts(ArrayList<CategoriaPodcast> categoriaPodcasts) {
-        this.categoriaPodcasts = categoriaPodcasts;
+    public void addCategoriaPodcasts(CategoriaPodcast categoriaPodcasts) {
+        this.categoriaPodcasts.add(categoriaPodcasts);
     }
 
     void publicarPodcast(Podcast episodio){}

@@ -21,4 +21,44 @@ public class EstadisticasCreador {
         this.totalReproducciones = totalReproducciones;
         this.episodioMasPopular = episodioMasPopular;
     }
+
+    public int getTotalEpisodios() {
+        return totalEpisodios;
+    }
+
+    public void setTotalEpisodios(int totalEpisodios) {
+        this.totalEpisodios = totalEpisodios;
+    }
+
+    public HashMap<CategoriaPodcast, Integer> getCategoriaFrecuentes() {
+        return categoriaFrecuentes;
+    }
+
+    public void setCategoriaFrecuentes(CategoriaPodcast, Integer categoriaFrecuentes) {
+        this.categoriaFrecuentes.put(CategoriaPodcast, categoriaFrecuentes);
+    }
+
+    public Podcast getEpisodioMasPopular() {
+        return episodioMasPopular;
+    }
+
+    public void setEpisodioMasPopular(Podcast episodioMasPopular) {
+        this.episodioMasPopular = episodioMasPopular;
+    }
+
+    public double getPromedioReproducciones() {
+        return promedioReproducciones;
+    }
+
+    public void setPromedioReproducciones(double promedioReproducciones) {
+        this.promedioReproducciones = promedioReproducciones;
+    }
+
+    public long getTotalReproducciones() {
+        return totalReproducciones;
+    }
+
+    public void setTotalReproducciones(long totalReproducciones) {
+        this.totalReproducciones = totalReproducciones;
+    }
 }
