@@ -1,85 +1,38 @@
 package modelo.contenido;
 
+import excepciones.contenido.DuracionInvalidaException;
+
 import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.*;
 
 public abstract class Contenido {
 
-    private String id;
-    private String titulo;
-    private int reproducciones;
-    private int likes;
-    private int duracionSegundos;
-    private ArrayList<String>tags;
-    private boolean disponible;
-    private LocalDate fechaPublicacion;
+    protected String id;
+    protected String titulo;
+    protected int reproducciones;
+    protected int likes;
+    protected int duracionSegundos;
+    protected ArrayList<String>tags;
+    protected boolean disponible;
+    protected Date fechaPublicacion;
 
-    public Contenido(String id, LocalDate fechaPublicacion, boolean disponible, ArrayList<String> tags, int duracionSegundos, int likes, int reproducciones, String titulo) {
-        this.id = id;
-        this.fechaPublicacion = fechaPublicacion;
-        this.disponible = disponible;
-        this.tags = new ArrayList<>();
-        this.duracionSegundos = duracionSegundos;
-        this.likes = likes;
-        this.reproducciones = reproducciones;
-        this.titulo = titulo;
+public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlagsException {
+    if (duracionSegundos <=0){
+        throw new DuplicateFormatFlagsException("La duracion debe ser mayor a 0");
     }
+    this.id = UUID.randomUUID().toString();
+    this.titulo = titulo;
+    this.duracionSegundos = duracionSegundos;
+    this.reproducciones = 0;
+    this.likes = 0;
+    this.tags = new ArrayList<>();
+    this.disponible = true;
+    this.fechaPublicacion = new Date();
 
+}
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public LocalDate getFechaPublicacion() {
-        return fechaPublicacion;
-    }
-
-    public void setFechaPublicacion(LocalDate fechaPublicacion) {
-        this.fechaPublicacion = fechaPublicacion;
-    }
-
-    public boolean isDisponible() {
-        return disponible;
-    }
-
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
-    }
-
-    public ArrayList<String> getTags() {
-        return tags;
-    }
-
-    public void addTags(String tags) {
-        this.tags.add(tags);
-    }
-
-    public int getDuracionSegundos() {
-        return duracionSegundos;
-    }
-
-    public void setDuracionSegundos(int duracionSegundos) {
-        this.duracionSegundos = duracionSegundos;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-    public int getReproducciones() {
-        return reproducciones;
-    }
-
-    public void setReproducciones(int reproducciones) {
-        this.reproducciones = reproducciones;
     }
 
     public String getTitulo() {
@@ -90,18 +43,91 @@ public abstract class Contenido {
         this.titulo = titulo;
     }
 
-    abstract void reproducir();
+    public int getReproducciones() {
+        return reproducciones;
+    }
 
-    void aumentarReproducciones(){}
+    public void setReproducciones(int reproducciones) {
+        this.reproducciones = reproducciones;
+    }
 
-    void agregarLike(){}
+    public int getLikes() {
+        return likes;
+    }
 
-    boolean esPopular(){
+    public int getDuracionSegundos() {
+        return duracionSegundos;
+    }
+
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    public Date getFechaPublicacion() {
+        return fechaPublicacion;
+    }
+
+    public void setFechaPublicacion(Date fechaPublicacion) {
+        this.fechaPublicacion = fechaPublicacion;
+    }
+
+
+    public abstract void reproducir() throws ConcurrentModificationException;
+
+
+
+    public void  aumentarReproducciones(){
+        this.reproducciones +=1;
+    }
+
+    public void agregarLike(){
+        this.likes +=1;
+    }
+
+    public boolean esPopular(){
+        return this.reproducciones > 100000;
+    }
+
+    public void validarDisponibilidad() throws DuplicateFormatFlagsException{
+
+    }
+
+    public void agregarTag(String tag) {
+    }
+
+    public boolean tieneTag(String tag) {
         return false;
     }
 
-    void validarDuracion(){}
+    public void marcarNoDisponible() {
+    }
 
 
+    public void marcarDisponible() {
+    }
 
+    public String getDuracionFormateada() {
+        int minutos = duracionSegundos / 60;
+        int segundos = duracionSegundos % 60;
+        return String.format("%02d:%02d", minutos, segundos);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

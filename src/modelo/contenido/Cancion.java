@@ -1,6 +1,7 @@
 package modelo.contenido;
 
 import enums.GeneroMusical;
+import excepciones.contenido.DuracionInvalidaException;
 import interfaces.IDescargable;
 import interfaces.IReproducible;
 import modelo.artistas.Album;
@@ -18,18 +19,42 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
     private String audioURL;
     private boolean explicit;
     private String ISRC;
+    private boolean reproduciendo;
+    private boolean pausado;
+    private boolean descargado;
 
 
-    public Cancion(String id, LocalDate fechaPublicacion, boolean disponible, ArrayList<String> tags, int duracionSegundos, int likes, int reproducciones, String titulo, String letra, String ISRC, boolean explicit, String audioURL, GeneroMusical genero, Album album, Artista artista) {
-        super(id, fechaPublicacion, disponible, tags, duracionSegundos, likes, reproducciones, titulo);
-        this.letra = letra;
-        this.ISRC = ISRC;
-        this.explicit = explicit;
-        this.audioURL = audioURL;
-        this.genero = genero;
-        this.album = album;
+    public Cancion(String titulo, int duracionSegundos, GeneroMusical genero, Artista artista)
+            throws DuracionInvalidaException {
+        super(titulo, duracionSegundos);
         this.artista = artista;
+        this.genero = genero;
+        this.letra = null;
+        this.album = null;
+        this.audioURL = "https://soundwave.com/audio/" + id + ".mp3";
+        this.explicit = false;
+        this.ISRC = generarISRC();
+        this.reproduciendo = false;
+        this.pausado = false;
+        this.descargado = false;
     }
+
+    public Cancion(String titulo, int duracionSegundos, GeneroMusical genero, Artista artista, String letra, boolean explicit)
+            throws DuracionInvalidaException {
+        super(titulo, duracionSegundos);
+        this.artista = artista;
+        this.genero = genero;
+        this.letra = null;
+        this.album = null;
+        this.audioURL = "https://soundwave.com/audio/" + id + ".mp3";
+        this.explicit = false;
+        this.ISRC = generarISRC();
+        this.reproduciendo = false;
+        this.pausado = false;
+        this.descargado = false;
+    }
+
+
 
     public String getLetra() {
         return letra;

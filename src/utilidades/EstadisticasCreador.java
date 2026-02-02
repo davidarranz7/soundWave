@@ -34,8 +34,8 @@ public class EstadisticasCreador {
         return categoriaFrecuentes;
     }
 
-    public void setCategoriaFrecuentes(CategoriaPodcast, Integer categoriaFrecuentes) {
-        this.categoriaFrecuentes.put(CategoriaPodcast, categoriaFrecuentes);
+    public void setCategoriaFrecuentes(CategoriaPodcast key, Integer categoriaFrecuentes) {
+        this.categoriaFrecuentes.put(key, categoriaFrecuentes);
     }
 
     public Podcast getEpisodioMasPopular() {
