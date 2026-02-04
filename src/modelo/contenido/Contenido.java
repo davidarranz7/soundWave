@@ -1,9 +1,4 @@
 package modelo.contenido;
-
-import excepciones.contenido.DuracionInvalidaException;
-
-import java.lang.reflect.Array;
-import java.time.LocalDate;
 import java.util.*;
 
 public abstract class Contenido {

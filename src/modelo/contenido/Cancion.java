@@ -1,7 +1,11 @@
 package modelo.contenido;
 
 import enums.GeneroMusical;
+import excepciones.contenido.ArchivoAudioNoEncontradoException;
 import excepciones.contenido.DuracionInvalidaException;
+import excepciones.contenido.LetraNoDisponibleException;
+import excepciones.descarga.ContenidoYaDescargadoException;
+import excepciones.descarga.LimiteDescargasException;
 import interfaces.IDescargable;
 import interfaces.IReproducible;
 import modelo.artistas.Album;
@@ -9,6 +13,7 @@ import modelo.artistas.Artista;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 public class Cancion extends Contenido implements IDescargable, IReproducible {
 
@@ -39,6 +44,7 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
         this.descargado = false;
     }
 
+
     public Cancion(String titulo, int duracionSegundos, GeneroMusical genero, Artista artista, String letra, boolean explicit)
             throws DuracionInvalidaException {
         super(titulo, duracionSegundos);
@@ -55,53 +61,12 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
     }
 
 
-
     public String getLetra() {
         return letra;
     }
 
     public void setLetra(String letra) {
         this.letra = letra;
-    }
-
-    public String getISRC() {
-        return ISRC;
-    }
-
-    public void setISRC(String ISRC) {
-        this.ISRC = ISRC;
-    }
-
-    public boolean isExplicit() {
-        return explicit;
-    }
-
-    public void setExplicit(boolean explicit) {
-        this.explicit = explicit;
-    }
-
-    public String getAudioURL() {
-        return audioURL;
-    }
-
-    public void setAudioURL(String audioURL) {
-        this.audioURL = audioURL;
-    }
-
-    public GeneroMusical getGenero() {
-        return genero;
-    }
-
-    public void setGenero(GeneroMusical genero) {
-        this.genero = genero;
-    }
-
-    public Album getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(Album album) {
-        this.album = album;
     }
 
     public Artista getArtista() {
@@ -112,38 +77,100 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
         this.artista = artista;
     }
 
-    @Override
-    void reproducir() {
+    public Album getAlbum() {
+        return album;
+    }
 
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
+    public GeneroMusical getGenero() {
+        return genero;
+    }
+
+    public void setGenero(GeneroMusical genero) {
+        this.genero = genero;
+    }
+
+    public String getAudioURL() {
+        return audioURL;
+    }
+
+    public void setAudioURL(String audioURL) {
+        this.audioURL = audioURL;
+    }
+
+    public boolean isExplicit() {
+        return explicit;
+    }
+
+    public void setExplicit(boolean explicit) {
+        this.explicit = explicit;
+    }
+
+    public String getISRC() {
+        return ISRC;
+    }
+
+    public void setISRC(String ISRC) {
+        this.ISRC = ISRC;
+    }
+
+    public boolean isReproduciendo() {
+        return reproduciendo;
+    }
+
+    public void setReproduciendo(boolean reproduciendo) {
+        this.reproduciendo = reproduciendo;
+    }
+
+    public boolean isPausado() {
+        return pausado;
+    }
+
+    public void setPausado(boolean pausado) {
+        this.pausado = pausado;
+    }
+
+    public boolean isDescargado() {
+        return descargado;
+    }
+
+    public void setDescargado(boolean descargado) {
+        this.descargado = descargado;
+    }
+
+    //String
+
+    public String generarISRC(){
+        return"";
     }
 
 
-    String obtenerLetra(){
-        return letra;
+    public String obtenerLetra() throws LetraNoDisponibleException{
+        return "";
     }
 
-    boolean esExplicita(){
+
+    public boolean esExplicit(){
         return false;
     }
 
+    public void cambiarGenero(GeneroMusical nuevoGenero){
 
-    void cambiarGenero(GeneroMusical genero){}
+    }
+
+    public void validarAudioURL() throws ArchivoAudioNoEncontradoException{
+
+    }
 
 
     @Override
-    public boolean descargar(Contenido contenido) {
-        return false;
+    public void reproducir() throws ConcurrentModificationException {
+
     }
 
-    @Override
-    public boolean eliminarDescarga(Contenido contenido) {
-        return false;
-    }
-
-    @Override
-    public int espacioRequerido() {
-        return 0;
-    }
 
     @Override
     public void play() {
@@ -166,4 +193,24 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
     }
 
 
+    @Override
+    public boolean descargar() throws LimiteDescargasException, ContenidoYaDescargadoException {
+        return false;
+    }
+
+    @Override
+    public boolean eliminarDescarga() {
+        return false;
+    }
+
+    @Override
+    public int espacioRequerido() {
+        return 0;
+    }
+
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
