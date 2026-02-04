@@ -10,9 +10,6 @@ import interfaces.IDescargable;
 import interfaces.IReproducible;
 import modelo.artistas.Album;
 import modelo.artistas.Artista;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 public class Cancion extends Contenido implements IDescargable, IReproducible {

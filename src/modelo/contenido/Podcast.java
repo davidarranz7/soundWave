@@ -1,142 +1,68 @@
 package modelo.contenido;
 
 import enums.CategoriaPodcast;
+import excepciones.contenido.DuracionInvalidaException;
+import excepciones.descarga.ContenidoYaDescargadoException;
+import excepciones.descarga.LimiteDescargasException;
 import interfaces.IDescargable;
-import interfaces.IRecomendador;
 import interfaces.IReproducible;
 import modelo.artistas.Creador;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.DuplicateFormatFlagsException;
 
-public class Podcast extends Contenido implements IDescargable, IReproducible {
+public class Podcast extends Contenido implements IDescargable,IReproducible {
 
     private Creador creador;
     private int numeroEpisodio;
     private int temporada;
     private String descripcion;
-    private CategoriaPodcast categoriaPodcast;
-    private ArrayList<String>invitado;
+    private CategoriaPodcast categoria;
+    private ArrayList<String> invitados;
     private String transcripcion;
+    private boolean reproduciendo;
+    private boolean pausado;
+    private boolean descargado;
 
 
-    public Podcast(String id, LocalDate fechaPublicacion, boolean disponible, ArrayList<String> tags, int duracionSegundos, int likes, int reproducciones, String titulo, String transcripcion, CategoriaPodcast categoriaPodcast, int numeroEpisodio, Creador creador, int temporada, String descripcion, ArrayList<String> invitados) {
-        super(id, fechaPublicacion, disponible, tags, duracionSegundos, likes, reproducciones, titulo);
-        this.transcripcion = transcripcion;
-        this.categoriaPodcast = categoriaPodcast;
+    public Podcast(String titulo, int duracionSegundos,Creador creador,int numeroEpisodio,int temporada, CategoriaPodcast categoria) throws DuracionInvalidaException {
+        super(titulo, duracionSegundos);
+        this.creador = creador;
         this.numeroEpisodio = numeroEpisodio;
-        this.creador = creador;
         this.temporada = temporada;
-        this.descripcion = descripcion;
-        this.invitado = new ArrayList<>();
+        this.categoria = categoria;
+        this.invitados = new ArrayList<>();
+
+
+
     }
 
-    public Creador getCreador() {
-        return creador;
-    }
 
-    public void setCreador(Creador creador) {
+    public Podcast(String titulo, int duracionSegundos, Creador creador, int numeroEpisodio, int temporada, CategoriaPodcast categoria, String descripcion) throws DuplicateFormatFlagsException {
+        super(titulo, duracionSegundos);
         this.creador = creador;
-    }
-
-    public ArrayList<String> getInvitado() {
-        return invitado;
-    }
-
-    public void addInvitado(String invitado) {
-        this.invitado.add(invitado);
-    }
-
-    public CategoriaPodcast getCategoriaPodcast() {
-        return categoriaPodcast;
-    }
-
-    public void setCategoriaPodcast(CategoriaPodcast categoriaPodcast) {
-        this.categoriaPodcast = categoriaPodcast;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
+        this.numeroEpisodio = numeroEpisodio;
+        this.temporada = temporada;
+        this.categoria = categoria;
         this.descripcion = descripcion;
     }
 
-    public int getTemporada() {
-        return temporada;
-    }
-
-    public void setTemporada(int temporada) {
-        this.temporada = temporada;
-    }
-
-    public int getNumeroEpisodio() {
-        return numeroEpisodio;
-    }
-
-    public void setNumeroEpisodio(int numeroEpisodio) {
-        this.numeroEpisodio = numeroEpisodio;
-    }
-
-    public String getTranscripcion() {
-        return transcripcion;
-    }
-
-    public void setTranscripcion(String transcripcion) {
-        this.transcripcion = transcripcion;
-    }
-
-    @Override
-    void reproducir() {
-
-    }
-
-    String obtenerDescripcion(){
-        return descripcion;
-    }
-
-    void agregarInvitado(String nombreInvitado) {
-
-    }
-
-    boolean esTemporadaNueva(){
-        return false;
-    }
+    //preguntar por que no se puede hacer los demas atributos!!!!
 
 
-    @Override
-    public boolean descargar(Contenido contenido) {
-        return false;
-    }
 
-    @Override
-    public boolean eliminarDescarga(Contenido contenido) {
-        return false;
-    }
 
-    @Override
-    public int espacioRequerido() {
-        return 0;
-    }
 
-    @Override
-    public void play() {
 
-    }
 
-    @Override
-    public void pause() {
 
-    }
 
-    @Override
-    public void stop() {
 
-    }
 
-    @Override
-    public int getDuracion() {
-        return 0;
-    }
+
+
+
+
+
+
 }
