@@ -1,6 +1,8 @@
 package modelo.artistas;
 
 import enums.CategoriaPodcast;
+import excepciones.artista.LimiteEpisodiosException;
+import excepciones.contenido.EpisodioNoEncontradoException;
 import modelo.contenido.Podcast;
 import utilidades.EstadisticasCreador;
 
@@ -17,25 +19,36 @@ public class Creador {
     private String descripcion;
     private HashMap<String,String>redesSociales;
     private ArrayList<CategoriaPodcast>categoriaPodcasts;
+    private static final int MAX_EPISODIOS = 500;
 
 
-    public Creador(String descripcion, int suscriptores, String nombre, String nombreCanal, String id) {
-        this.categoriaPodcasts = new ArrayList<>();
-        this.redesSociales = new HashMap<>();
-        this.descripcion = descripcion;
-        this.suscriptores = suscriptores;
-        this.episodios = new ArrayList<>();
-        this.nombre = nombre;
-        this.nombreCanal = nombreCanal;
+    public Creador(String nombreCanal, String nombre) {
         this.id = id;
+        this.nombreCanal = nombreCanal;
+        this.nombre = nombre;
+        this.episodios = new ArrayList<>();
+        this.suscriptores = 0;
+        this.descripcion = "";
+        this.redesSociales = new HashMap<>();
+        this.categoriaPodcasts = new ArrayList<>();
     }
+
+    public Creador(String nombreCanal, String nombre, String descripcion) {
+        this.id = id;
+        this.nombreCanal = nombreCanal;
+        this.nombre = nombre;
+        this.episodios = new ArrayList<>();
+        this.suscriptores = 0;
+        this.descripcion = descripcion;
+        this.redesSociales = new HashMap<>();
+        this.categoriaPodcasts = new ArrayList<>();
+    }
+
+
+
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getNombreCanal() {
@@ -57,10 +70,8 @@ public class Creador {
     public ArrayList<Podcast> getEpisodios() {
         return episodios;
     }
+    //por que no hay set
 
-    public void addEpisodios(Podcast episodios) {
-        this.episodios.add(episodios);
-    }
 
     public int getSuscriptores() {
         return suscriptores;
@@ -82,33 +93,96 @@ public class Creador {
         return redesSociales;
     }
 
-    public void addRedesSociales(String key,String redesSocial) {
-        this.redesSociales.put(key, redesSocial);
-    }
+    //por que no hay set
+
 
     public ArrayList<CategoriaPodcast> getCategoriaPodcasts() {
-        return categoriaPodcasts;
+        return new ArrayList<>(categoriaPodcasts);
     }
 
-    public void addCategoriaPodcasts(CategoriaPodcast categoriaPodcasts) {
-        this.categoriaPodcasts.add(categoriaPodcasts);
+    //por que no hay set
+
+
+
+    public int getNumEpisodios(){
+        return episodios.size();
     }
 
-    void publicarPodcast(Podcast episodio){}
 
+    //metodos
 
-    EstadisticasCreador obtenerEstadisticas;
-
-    void agregarRedSocial(String red, String usuario){}
-
-
-    double calcularPromedioReproducciones(){
-        return 0;
+    public void publicarPodcast(Podcast episodio) throws LimiteEpisodiosException {
+        if (episodios.size() >= MAX_EPISODIOS) {
+            throw new LimiteEpisodiosException("No se pueden publicar más episodios.");
+        }
+        episodio.setCreador(this);
+        episodios.add(episodio);
     }
 
-    void eliminarEpisodio(String idEpisodio){
+    //falta logica
 
+    public EstadisticasCreador obtenerEstadisticas(){
+        return null;
     }
+
+
+    public void agregarRedSocial(String red, String usuario) {
+        redesSociales.put(red, usuario);
+    }
+
+    //revisar logica
+    public double calcularPromedioReproducciones(){
+        if (episodios.isEmpty()) {
+            return 0.0;
+        }
+        int totalReproducciones = episodios.stream().mapToInt(Podcast::getReproducciones).sum();
+        return (double) totalReproducciones / episodios.size();
+    }
+
+    public void eliminarEpisodio(String idEpisodio) throws EpisodioNoEncontradoException{
+        boolean eliminado = episodios.removeIf(episodio -> episodio.getId().equals(idEpisodio));
+        if (!eliminado) {
+            throw new EpisodioNoEncontradoException("Episodio con ID " + idEpisodio + " no encontrado.");
+        }
+    }
+
+
+    public int getTotalReproducciones() {
+        return episodios.stream().mapToInt(Podcast::getReproducciones).sum();
+    }
+
+    public void incrementarSuscriptores() {
+        this.suscriptores++;
+    }
+
+    //ver logica
+    public ArrayList<Podcast> obtenerTopEpisodios(int cantidad) {
+        return null;
+    }
+
+    public int getUltimaTemporada(){
+        if (episodios.isEmpty()) {
+            return 0;
+        }
+        return episodios.stream().mapToInt(Podcast::getTemporada).max().orElse(0);
+    }
+
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 
 
 }

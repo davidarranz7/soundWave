@@ -1,4 +1,6 @@
 package modelo.contenido;
+import excepciones.contenido.ContenidoNoDisponibleException;
+
 import java.util.*;
 
 public abstract class Contenido {
@@ -71,7 +73,7 @@ public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlags
     }
 
 
-    public abstract void reproducir() throws ConcurrentModificationException;
+    public abstract void reproducir() throws ContenidoNoDisponibleException;
 
 
 
@@ -79,7 +81,7 @@ public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlags
         this.reproducciones +=1;
     }
 
-    public void agregarLike(){
+    public void agregarLike(String tag){
         this.likes +=1;
     }
 
@@ -92,10 +94,14 @@ public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlags
     }
 
     public void agregarTag(String tag) {
+        if ( tag!= null && !tag.trim().isEmpty() && !tags.contains(tag)) {
+            tags.add(tag.toLowerCase());
+        }
+
     }
 
     public boolean tieneTag(String tag) {
-        return false;
+        return tags.contains(tag.toLowerCase()) ;
     }
 
     public void marcarNoDisponible() {

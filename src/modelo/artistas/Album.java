@@ -1,77 +1,58 @@
 package modelo.artistas;
 
 import enums.GeneroMusical;
+import excepciones.artista.AlbumCompletoException;
+import excepciones.contenido.DuracionInvalidaException;
+import excepciones.playlist.CancionNoEncontradaException;
 import modelo.contenido.Cancion;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Album {
 
     private String id;
     private String titulo;
-    private LocalDate fechaLanzamiento;
+    private Artista artista;
+    private Date fechaLanzamiento;
     private ArrayList<Cancion> canciones;
     private String portadaURL;
     private String discografica;
     private String tipoAlbum;
+    private static final int MAX_CANCIONES = 20;
 
-    public Album(String id, String tipoAlbum, String discografica, String portadaURL, ArrayList<Cancion> canciones, LocalDate fechaLanzamiento, String titulo) {
+    //constructor
+
+
+    public Album(String titulo, Artista artista, Date fechaLanzamiento) {
         this.id = id;
-        this.tipoAlbum = tipoAlbum;
-        this.discografica = discografica;
-        this.portadaURL = portadaURL;
-        this.canciones = new ArrayList<>();
-        this.fechaLanzamiento = fechaLanzamiento;
         this.titulo = titulo;
+        this.artista = artista;
+        this.fechaLanzamiento = fechaLanzamiento;
+        this.canciones = new ArrayList<>();
+        this.portadaURL = portadaURL;
+        this.discografica = discografica;
+        this.tipoAlbum = tipoAlbum;
     }
+
+    public Album(String titulo, Artista artista, Date fechaLanzamiento, String discografica, String tipoAlbum) {
+        this.id = id;
+        this.titulo = titulo;
+        this.artista = artista;
+        this.fechaLanzamiento = fechaLanzamiento;
+        this.canciones = new ArrayList<>();
+        this.portadaURL = portadaURL;
+        this.discografica = discografica;
+        this.tipoAlbum = tipoAlbum;
+    }
+
+
+
+    //getters y setters
+
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTipoAlbum() {
-        return tipoAlbum;
-    }
-
-    public void setTipoAlbum(String tipoAlbum) {
-        this.tipoAlbum = tipoAlbum;
-    }
-
-    public String getDiscografica() {
-        return discografica;
-    }
-
-    public void setDiscografica(String discografica) {
-        this.discografica = discografica;
-    }
-
-    public String getPortadaURL() {
-        return portadaURL;
-    }
-
-    public void setPortadaURL(String portadaURL) {
-        this.portadaURL = portadaURL;
-    }
-
-    public ArrayList<Cancion> getCanciones() {
-        return canciones;
-    }
-
-    public void addCanciones(Cancion canciones) {
-        this.canciones.add(canciones);
-    }
-
-    public LocalDate getFechaLanzamiento() {
-        return fechaLanzamiento;
-    }
-
-    public void setFechaLanzamiento(LocalDate fechaLanzamiento) {
-        this.fechaLanzamiento = fechaLanzamiento;
     }
 
     public String getTitulo() {
@@ -82,41 +63,142 @@ public class Album {
         this.titulo = titulo;
     }
 
+    public Artista getArtista() {
+        return artista;
+    }
+
+    public void setArtista(Artista artista) {
+        this.artista = artista;
+    }
 
 
+    public Date getFechaLanzamiento() {
+        return fechaLanzamiento;
+    }
 
-    Cancion crearCancion(String titulo, int duracion, GeneroMusical genero){
+    public void setFechaLanzamiento(Date fechaLanzamiento) {
+        this.fechaLanzamiento = fechaLanzamiento;
+    }
+
+
+    public ArrayList<Cancion> getCanciones() {
+        return canciones;
+    }
+
+
+    public String getPortadaURL() {
+        return portadaURL;
+    }
+
+    public void setPortadaURL(String portadaURL) {
+        this.portadaURL = portadaURL;
+    }
+
+    public String getDiscografica() {
+        return discografica;
+    }
+
+    public void setDiscografica(String discografica) {
+        this.discografica = discografica;
+    }
+
+    public String getTipoAlbum() {
+        return tipoAlbum;
+    }
+
+    public void setTipoAlbum(String tipoAlbum) {
+        this.tipoAlbum = tipoAlbum;
+    }
+
+    public int getMaxCanciones(){
+        return MAX_CANCIONES;
+    }
+
+    //metodos composicion
+
+    public Cancion crearCancion(String titulo, int duracionSegundos,GeneroMusical genero)throws AlbumCompletoException, DuracionInvalidaException {
+
+       return null;
+    }
+
+
+    public Cancion crearCancion(String titulo, int duracionSegundos, GeneroMusical genero, String letra, boolean esxplicit) throws AlbumCompletoException, DuracionInvalidaException {
+
         return null;
     }
 
 
+    //metodos de la la clase
 
-    void agregarCancion(Cancion cancion){
+    public void eliminarCancion(int posicion) throws CancionNoEncontradaException {
+        if (posicion < 1 || posicion > canciones.size()) {
+            throw new CancionNoEncontradaException("No exite cancion en la posicion especificada");
+        }
+        Cancion cancion = canciones.remove(posicion -1);
+        cancion.setAlbum(null);
+
+
     }
 
-
-
-    void eliminarCancion(int posicion){
+    public void eliminarCancion(Cancion cancion) throws CancionNoEncontradaException {
 
     }
 
+    public int getDuracionTotal() {
+        int duracionTotal = 0;
+        for (Cancion cancion : canciones) {
+            duracionTotal += cancion.getDuracionSegundos();
+        }
+        return duracionTotal;
+    }
 
-    int getDuracionTotal(){
+    public String getDuracionTotalFormateada(){
+        int duracionTotalSegundos = getDuracionTotal();
+        int minutos = duracionTotalSegundos / 60;
+        int segundos = duracionTotalSegundos % 60;
+        return String.format("%02d:%02d", minutos, segundos);
+    }
+
+    public int getNumCanciones(){
+        return canciones.size();
+    }
+
+    public void ordenarPorPopularidad(){
+    /*    canciones.sort((c1, c2) ->
+                Integer.compare(
+                        c2.getNumReproducciones(),
+                        c1.getNumReproducciones()
+                )
+        );*/
+    }
+
+    public Cancion getCancion(int posicion) throws CancionNoEncontradaException {
+        return null;
+    }
+
+    public int getTotalReproducciones(){
+    /*    int totalReproducciones = 0;
+        for (Cancion cancion : canciones) {
+            totalReproducciones += cancion.getNumReproducciones();
+        }*/
         return 0;
     }
 
 
-
-    int getNumCanciones(){
-        return 0;
+    @Override
+    public String toString() {
+        return super.toString();
     }
 
-
-
-    void ordenarPorPopularidad() {
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 
-
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
 
 

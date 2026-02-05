@@ -1,6 +1,8 @@
 package modelo.usuarios;
 
 import enums.TipoSuscripcion;
+import excepciones.usuario.EmailInvalidoException;
+import excepciones.usuario.PasswordDebilException;
 import modelo.contenido.Contenido;
 import modelo.plataforma.Playlist;
 
@@ -14,13 +16,13 @@ public class UsuarioGratuito extends Usuario{
     private int limiteReproducciones;
     private int cancionesSinAnuncios;
 
-    public UsuarioGratuito(String id, String nombre, String email, String password, TipoSuscripcion suscripcion, ArrayList<Playlist> misPlaylists, ArrayList<Contenido> contenidos, LocalDate fechaRegistro, int anunciosEscuchados, int cancionesSinAnuncios, int limiteReproducciones, int reproduccionesHoy, LocalDate ultimoAnuncio) {
-        super(id, nombre, email, password, suscripcion, misPlaylists, contenidos, fechaRegistro);
+    public UsuarioGratuito(String nombre, String email, String password, TipoSuscripcion suscripcion, int anunciosEscuchados, LocalDate ultimoAnuncio, int reproduccionesHoy, int limiteReproducciones, int cancionesSinAnuncios) throws EmailInvalidoException, PasswordDebilException {
+        super(nombre, email, password, suscripcion);
         this.anunciosEscuchados = anunciosEscuchados;
-        this.cancionesSinAnuncios = cancionesSinAnuncios;
-        this.limiteReproducciones = limiteReproducciones;
-        this.reproduccionesHoy = reproduccionesHoy;
         this.ultimoAnuncio = ultimoAnuncio;
+        this.reproduccionesHoy = reproduccionesHoy;
+        this.limiteReproducciones = limiteReproducciones;
+        this.cancionesSinAnuncios = cancionesSinAnuncios;
     }
 
     public int getAnunciosEscuchados() {
