@@ -141,7 +141,7 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
     //String
 
     public String generarISRC(){
-        return"";
+        return"ES" +  System.currentTimeMillis() % 1000;
     }
 
 
@@ -165,12 +165,19 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
 
     @Override
     public void reproducir() throws ConcurrentModificationException {
-
+        if(!disponible){
+            throw new ConcurrentModificationException("La canción no está disponible ");
+        }
+        play();
+        aumentarReproducciones();
     }
 
 
     @Override
     public void play() {
+        this.reproduciendo = true;
+        this.pausado = false;
+
 
     }
 

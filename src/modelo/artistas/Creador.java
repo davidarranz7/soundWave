@@ -44,9 +44,6 @@ public class Creador {
         this.categoriaPodcasts = new ArrayList<>();
     }
 
-
-
-
     public String getId() {
         return id;
     }
@@ -68,10 +65,8 @@ public class Creador {
     }
 
     public ArrayList<Podcast> getEpisodios() {
-        return episodios;
+        return new ArrayList<>(episodios);
     }
-    //por que no hay set
-
 
     public int getSuscriptores() {
         return suscriptores;
@@ -90,19 +85,12 @@ public class Creador {
     }
 
     public HashMap<String, String> getRedesSociales() {
-        return redesSociales;
+        return new HashMap<>(redesSociales);
     }
-
-    //por que no hay set
-
 
     public ArrayList<CategoriaPodcast> getCategoriaPodcasts() {
         return new ArrayList<>(categoriaPodcasts);
     }
-
-    //por que no hay set
-
-
 
     public int getNumEpisodios(){
         return episodios.size();

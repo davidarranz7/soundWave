@@ -46,8 +46,6 @@ public class Album {
         this.tipoAlbum = tipoAlbum;
     }
 
-
-
     //getters y setters
 
 
@@ -82,7 +80,7 @@ public class Album {
 
 
     public ArrayList<Cancion> getCanciones() {
-        return canciones;
+        return new ArrayList<>(canciones);
     }
 
 
@@ -120,7 +118,6 @@ public class Album {
 
        return null;
     }
-
 
     public Cancion crearCancion(String titulo, int duracionSegundos, GeneroMusical genero, String letra, boolean esxplicit) throws AlbumCompletoException, DuracionInvalidaException {
 

@@ -57,7 +57,7 @@ public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlags
     }
 
     public ArrayList<String> getTags() {
-        return tags;
+        return new ArrayList<>(tags);
     }
 
     public boolean isDisponible() {
@@ -78,11 +78,11 @@ public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlags
 
 
     public void  aumentarReproducciones(){
-        this.reproducciones +=1;
+        this.reproducciones ++;
     }
 
     public void agregarLike(String tag){
-        this.likes +=1;
+        this.likes ++;
     }
 
     public boolean esPopular(){
@@ -119,16 +119,19 @@ public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlags
 
     @Override
     public String toString() {
-        return super.toString();
+        return "contenido" + titulo + "duracion" + getDuracionFormateada();
     }
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Contenido contenido = (Contenido) obj;
+        return Objects.equals(id, contenido.id);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return id.hashCode();
     }
 }
