@@ -73,6 +73,7 @@ public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlags
     }
 
 
+    //metodo abstracto
     public abstract void reproducir() throws ContenidoNoDisponibleException;
 
 

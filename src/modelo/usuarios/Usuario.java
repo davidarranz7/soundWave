@@ -111,7 +111,7 @@ public abstract class  Usuario {
 
     //revisar logicas
     public Playlist crearPlaylist(String nombrePlaylist){
-        Playlist nuevaPlaylist = new Playlist(nombrePlaylist);
+        Playlist nuevaPlaylist = new Playlist(nombrePlaylist,this);
         misPlaylists.add(nuevaPlaylist);
         return nuevaPlaylist;
     }
