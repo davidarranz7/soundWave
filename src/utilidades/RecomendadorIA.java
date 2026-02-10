@@ -9,7 +9,7 @@ import modelo.usuarios.Usuario;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class RecomendadoIA implements IRecomendador {
+public class RecomendadorIA implements IRecomendador {
 
     private HashMap<String, ArrayList<String>> matrizPreferencias;
     private HashMap<String, ArrayList<Contenido>> historialCompleto;
@@ -20,13 +20,13 @@ public class RecomendadoIA implements IRecomendador {
     private static final double UMBRAL_DEFAULT = 0.6;
 
 
-    public RecomendadoIA() {
+    public RecomendadorIA() {
         this.matrizPreferencias = new HashMap<>();
         this.historialCompleto = new HashMap<>();
         this.catalogoReferencia = new ArrayList<>();
     }
 
-    public RecomendadoIA(AlgoritmoRecomendacion algoritmo) {
+    public RecomendadorIA(AlgoritmoRecomendacion algoritmo) {
         this.matrizPreferencias = new HashMap<>();
         this.historialCompleto = new HashMap<>();
         this.algoritmo = algoritmo;

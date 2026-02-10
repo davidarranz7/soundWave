@@ -131,14 +131,23 @@ public class Podcast extends Contenido implements IDescargable,IReproducible {
 
 
     //metodos Propios
+    //preguntar
+    public String obtenerDescripcion() {
 
-    public String obtenerDescripcion(){
+        if (descripcion == null || descripcion.trim().isEmpty()) {
+            return "Sin descripción disponible";
+        }
+
         return descripcion;
     }
 
+    //preguntar
+    public void agregarInvitado(String nombre) {
+        if (nombre != null && !nombre.trim().isEmpty()
+                && !invitados.contains(nombre)) {
 
-    public void agregarInvitado(String nombre){
-        invitados.add(nombre);
+            invitados.add(nombre);
+        }
     }
 
     public boolean esTemporadaNueva(){
@@ -146,12 +155,21 @@ public class Podcast extends Contenido implements IDescargable,IReproducible {
     }
 
     public String obtenerTranscripcion() throws TranscripcionNoDisponibleException {
+
+        if (transcripcion == null || transcripcion.trim().isEmpty()) {
+            throw new TranscripcionNoDisponibleException("No hay transcripción disponible");
+        }
+
         return transcripcion;
     }
+
 
     //falta la logica de esto!!!
     public void validarEpisodio() throws EpisodioNoEncontradoException {
 
+        if (temporada <= 0 || numeroEpisodio <= 0) {
+            throw new EpisodioNoEncontradoException("Temporada o episodio inválido");
+        }
     }
 
 
@@ -159,48 +177,100 @@ public class Podcast extends Contenido implements IDescargable,IReproducible {
     @Override
     public void reproducir() throws ContenidoNoDisponibleException {
 
+        if (!isDisponible()) {
+            throw new ContenidoNoDisponibleException("El podcast no está disponible");
+        }
+
+        play();
+        aumentarReproducciones();
     }
 
+    //metodos IReproducible
 
     @Override
     public void play() {
+        this.reproduciendo = true;
+        this.pausado = false;
+
+        System.out.println("Reproduciendo: " + getTitulo() +
+                " (" + getDuracionFormateada() + ")");
 
     }
 
     @Override
     public void pause() {
 
+        if (reproduciendo) {
+            reproduciendo = false;
+            pausado = true;
+
+            System.out.println("Pausado: " + getTitulo());
+        }
     }
 
     @Override
     public void stop() {
 
+        reproduciendo = false;
+        pausado = false;
+
+        System.out.println("Detenido: " + getTitulo());
+
     }
 
     @Override
     public int getDuracion() {
-        return 0;
+        return duracionSegundos;
     }
 
-
+    //metodos IDescargable
+    //preguntar!!!
     @Override
     public boolean descargar() throws LimiteDescargasException, ContenidoYaDescargadoException {
-        return false;
+
+        if (descargado) {
+            throw new ContenidoYaDescargadoException("El contenido ya está descargado");
+        }
+
+        descargado = true;
+        return true;
     }
+
 
     @Override
     public boolean eliminarDescarga() {
+
+        if (descargado) {
+            descargado = false;
+            return true;
+        }
+
         return false;
     }
 
+    //preguntar!!!
     @Override
     public int espacioRequerido() {
-        return 0;
+
+        int minutos = duracionSegundos / 60;
+
+        if (minutos == 0) {
+            minutos = 1;
+        }
+
+        return minutos;
     }
+
 
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Podcast: " + getTitulo() +
+                " | Creador: " + creador +
+                " | Temporada " + temporada +
+                " Episodio " + numeroEpisodio +
+                " | Categoría: " + categoria +
+                " | Duración: " + getDuracionFormateada();
     }
+
 }

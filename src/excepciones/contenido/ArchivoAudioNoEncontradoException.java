@@ -1,4 +1,7 @@
 package excepciones.contenido;
 
 public class ArchivoAudioNoEncontradoException extends Exception{
+    public ArchivoAudioNoEncontradoException(String mensaje) {
+        super(mensaje);
+    }
 }

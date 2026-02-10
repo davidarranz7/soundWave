@@ -1,5 +1,6 @@
 package modelo.contenido;
 import excepciones.contenido.ContenidoNoDisponibleException;
+import excepciones.contenido.DuracionInvalidaException;
 
 import java.util.*;
 
@@ -76,13 +77,13 @@ public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlags
     //metodo abstracto
     public abstract void reproducir() throws ContenidoNoDisponibleException;
 
-
+    //metodos propios
 
     public void  aumentarReproducciones(){
         this.reproducciones ++;
     }
 
-    public void agregarLike(String tag){
+    public void agregarLike(){
         this.likes ++;
     }
 
@@ -90,32 +91,38 @@ public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlags
         return this.reproducciones > 100000;
     }
 
-    public void validarDisponibilidad() throws DuplicateFormatFlagsException{
-
+    public void validarDuracion() throws DuracionInvalidaException {
+        if (duracionSegundos <= 0) {
+            throw new DuracionInvalidaException("La duración debe ser mayor que 0");
+        }
     }
+
 
     public void agregarTag(String tag) {
         if ( tag!= null && !tag.trim().isEmpty() && !tags.contains(tag)) {
             tags.add(tag.toLowerCase());
         }
-
     }
 
     public boolean tieneTag(String tag) {
-        return tags.contains(tag.toLowerCase()) ;
+        //if (tag == null) return false;
+        return tags.contains(tag.toLowerCase());
     }
 
     public void marcarNoDisponible() {
+        this.disponible = false;
     }
 
 
+
     public void marcarDisponible() {
+        this.disponible = true;
     }
 
     public String getDuracionFormateada() {
         int minutos = duracionSegundos / 60;
         int segundos = duracionSegundos % 60;
-        return String.format("%02d:%02d", minutos, segundos);
+        return String.format("%d:%02d", minutos, segundos);
     }
 
     @Override

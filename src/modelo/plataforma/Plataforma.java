@@ -22,9 +22,8 @@ import modelo.contenido.Podcast;
 import modelo.usuarios.Usuario;
 import modelo.usuarios.UsuarioGratuito;
 import modelo.usuarios.UsuarioPremium;
-import utilidades.RecomendadoIA;
+import utilidades.RecomendadorIA;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,7 +40,7 @@ public class Plataforma {
     private HashMap<String, Creador> creadores;
     private ArrayList<Album> albumes;
     private ArrayList<Anuncio> anuncios;
-    private RecomendadoIA recomendador;
+    private RecomendadorIA recomendador;
     private int totalAnuncioReproducidos;
 
     public Plataforma(String nombre) {
@@ -80,7 +79,7 @@ public class Plataforma {
         return anuncios;
     }
 
-    public RecomendadoIA getRecomendador() {
+    public RecomendadorIA getRecomendador() {
         return recomendador;
     }
 
@@ -112,7 +111,7 @@ public class Plataforma {
         return instancia;
     }
 
-    public synchronized void reiniciarInstancia() {
+    public static synchronized void reiniciarInstancia() {
         instancia = null;
     }
 

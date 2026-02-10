@@ -2,6 +2,7 @@ package modelo.contenido;
 
 import enums.GeneroMusical;
 import excepciones.contenido.ArchivoAudioNoEncontradoException;
+import excepciones.contenido.ContenidoNoDisponibleException;
 import excepciones.contenido.DuracionInvalidaException;
 import excepciones.contenido.LetraNoDisponibleException;
 import excepciones.descarga.ContenidoYaDescargadoException;
@@ -11,6 +12,7 @@ import interfaces.IReproducible;
 import modelo.artistas.Album;
 import modelo.artistas.Artista;
 import java.util.ConcurrentModificationException;
+import java.util.UUID;
 
 public class Cancion extends Contenido implements IDescargable, IReproducible {
 
@@ -138,83 +140,133 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
         this.descargado = descargado;
     }
 
-    //String
+    //metodo privado
+    //preguntar
+    public String generarISRC() {
+        return "ES-" + UUID.randomUUID().toString().substring(0, 8);
+    }
 
-    public String generarISRC(){
-        return"ES" +  System.currentTimeMillis() % 1000;
+    //metodos propios
+
+    public String obtenerLetra() throws LetraNoDisponibleException {
+
+        if (letra == null || letra.trim().isEmpty()) {
+            throw new LetraNoDisponibleException("La canción no tiene letra disponible");
+        }
+
+        return letra;
     }
 
 
-    public String obtenerLetra() throws LetraNoDisponibleException{
-        return "";
+    public boolean esExplicit() {
+        return this.explicit;
+    }
+
+    public void cambiarGenero(GeneroMusical nuevoGenero) {
+        this.genero = nuevoGenero;
+    }
+
+    public void validarAudioURL() throws ArchivoAudioNoEncontradoException {
+
+        if (audioURL == null || audioURL.trim().isEmpty()) {
+            throw new ArchivoAudioNoEncontradoException("No existe URL de audio");
+        }
     }
 
 
-    public boolean esExplicit(){
-        return false;
-    }
-
-    public void cambiarGenero(GeneroMusical nuevoGenero){
-
-    }
-
-    public void validarAudioURL() throws ArchivoAudioNoEncontradoException{
-
-    }
-
-
+    //overide del padre
     @Override
-    public void reproducir() throws ConcurrentModificationException {
-        if(!disponible){
-            throw new ConcurrentModificationException("La canción no está disponible ");
+    public void reproducir() throws ContenidoNoDisponibleException {
+        if (!disponible) {
+            throw new ContenidoNoDisponibleException("La canción no está disponible ");
         }
         play();
         aumentarReproducciones();
     }
 
-
+    //overide de Reproducible
     @Override
     public void play() {
         this.reproduciendo = true;
         this.pausado = false;
 
+        System.out.println("Reproduciendo: " + getTitulo() +
+                " (" + getDuracionFormateada() + ")");
 
     }
 
     @Override
     public void pause() {
 
+        if (reproduciendo) {
+            reproduciendo = false;
+            pausado = true;
+
+            System.out.println("Pausado: " + getTitulo());
+        }
     }
+
 
     @Override
     public void stop() {
+
+        reproduciendo = false;
+        pausado = false;
+
+        System.out.println("Detenido: " + getTitulo());
 
     }
 
     @Override
     public int getDuracion() {
-        return 0;
+        return duracionSegundos;
     }
 
-
+    //overide de IDescargable
     @Override
-    public boolean descargar() throws LimiteDescargasException, ContenidoYaDescargadoException {
-        return false;
+    public boolean descargar() throws ContenidoYaDescargadoException {
+
+        if (descargado) {
+            throw new ContenidoYaDescargadoException("El contenido ya está descargado");
+        }
+
+        descargado = true;
+        return true;
     }
+
 
     @Override
     public boolean eliminarDescarga() {
+
+        if (descargado) {
+            descargado = false;
+            return true;
+        }
+
         return false;
     }
 
+    //preguntar
     @Override
     public int espacioRequerido() {
-        return 0;
+
+        int minutos = duracionSegundos / 60;
+
+        if (minutos == 0) {
+            minutos = 1;
+        }
+
+        return minutos;
     }
 
 
+    //preguntar
     @Override
     public String toString() {
-        return super.toString();
+        return "Canción: " + getTitulo() +
+                " | Artista: " + artista +
+                " | Duración: " + getDuracionFormateada();
     }
+
 }
+
