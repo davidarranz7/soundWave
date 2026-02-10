@@ -150,7 +150,7 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
 
     public String obtenerLetra() throws LetraNoDisponibleException {
 
-        if (letra == null || letra.trim().isEmpty()) {
+        if (letra == null || letra.isEmpty()) {
             throw new LetraNoDisponibleException("La canción no tiene letra disponible");
         }
 
@@ -250,13 +250,7 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
     @Override
     public int espacioRequerido() {
 
-        int minutos = duracionSegundos / 60;
-
-        if (minutos == 0) {
-            minutos = 1;
-        }
-
-        return minutos;
+        return (duracionSegundos/60)+1;
     }
 
 

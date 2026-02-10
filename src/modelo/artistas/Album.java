@@ -8,6 +8,7 @@ import modelo.contenido.Cancion;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 public class Album {
 
@@ -25,23 +26,19 @@ public class Album {
 
 
     public Album(String titulo, Artista artista, Date fechaLanzamiento) {
-        this.id = id;
+        this.id = UUID.randomUUID().toString();;
         this.titulo = titulo;
         this.artista = artista;
         this.fechaLanzamiento = fechaLanzamiento;
         this.canciones = new ArrayList<>();
-        this.portadaURL = portadaURL;
-        this.discografica = discografica;
-        this.tipoAlbum = tipoAlbum;
     }
 
     public Album(String titulo, Artista artista, Date fechaLanzamiento, String discografica, String tipoAlbum) {
-        this.id = id;
+        this.id = UUID.randomUUID().toString();;
         this.titulo = titulo;
         this.artista = artista;
         this.fechaLanzamiento = fechaLanzamiento;
         this.canciones = new ArrayList<>();
-        this.portadaURL = portadaURL;
         this.discografica = discografica;
         this.tipoAlbum = tipoAlbum;
     }
@@ -114,16 +111,27 @@ public class Album {
 
     //metodos composicion
 
-    public Cancion crearCancion(String titulo, int duracionSegundos,GeneroMusical genero)throws AlbumCompletoException, DuracionInvalidaException {
-
-       return null;
+    public Cancion crearCancion(String titulo, int duracionSegundos, GeneroMusical genero)
+            throws AlbumCompletoException, DuracionInvalidaException {
+        if (canciones.size() >= MAX_CANCIONES) {
+            throw new AlbumCompletoException("El álbum está completo");
+        }
+        Cancion nueva = new Cancion(titulo, duracionSegundos, genero, artista);
+        canciones.add(nueva);
+        return nueva;
     }
 
-    public Cancion crearCancion(String titulo, int duracionSegundos, GeneroMusical genero, String letra, boolean esxplicit) throws AlbumCompletoException, DuracionInvalidaException {
-
-        return null;
+    public Cancion crearCancion(String titulo, int duracionSegundos,GeneroMusical genero, String letra, boolean explicit)
+            throws AlbumCompletoException, DuracionInvalidaException {
+        if (canciones.size() >= MAX_CANCIONES) {
+            throw new AlbumCompletoException("El álbum está completo");
+        }
+        Cancion nueva = new Cancion(titulo, duracionSegundos, genero, artista);
+        nueva.setLetra(letra);
+        nueva.setExplicit(explicit);
+        canciones.add(nueva);
+        return nueva;
     }
-
 
     //metodos de la la clase
 
@@ -139,7 +147,14 @@ public class Album {
 
     public void eliminarCancion(Cancion cancion) throws CancionNoEncontradaException {
 
+        if (!canciones.contains(cancion)) {
+            throw new CancionNoEncontradaException("La canción no existe en el álbum");
+        }
+
+        canciones.remove(cancion);
+        cancion.setAlbum(null);
     }
+
 
     public int getDuracionTotal() {
         int duracionTotal = 0;
@@ -160,25 +175,29 @@ public class Album {
         return canciones.size();
     }
 
-    public void ordenarPorPopularidad(){
-    /*    canciones.sort((c1, c2) ->
+    public void ordenarPorPopularidad() {
+
+        canciones.sort((c1, c2) ->
                 Integer.compare(
-                        c2.getNumReproducciones(),
-                        c1.getNumReproducciones()
+                        c2.getReproducciones(),
+                        c1.getReproducciones()
                 )
-        );*/
+        );
     }
 
     public Cancion getCancion(int posicion) throws CancionNoEncontradaException {
-        return null;
+        if (posicion < 1 || posicion > canciones.size()) {;
+            throw new CancionNoEncontradaException("No exite cancion en la posicion especificada");
+        }
+        return canciones.get(posicion -1);
     }
 
     public int getTotalReproducciones(){
-    /*    int totalReproducciones = 0;
+        int total = 0;
         for (Cancion cancion : canciones) {
-            totalReproducciones += cancion.getNumReproducciones();
-        }*/
-        return 0;
+            total += cancion.getReproducciones();
+        }
+        return total;
     }
 
 

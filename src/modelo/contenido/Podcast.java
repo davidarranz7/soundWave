@@ -134,19 +134,14 @@ public class Podcast extends Contenido implements IDescargable,IReproducible {
     //preguntar
     public String obtenerDescripcion() {
 
-        if (descripcion == null || descripcion.trim().isEmpty()) {
-            return "Sin descripción disponible";
-        }
-
-        return descripcion;
+        return descripcion != null && !descripcion.isEmpty() ? descripcion : "No hay descripción disponible";
     }
 
     //preguntar
     public void agregarInvitado(String nombre) {
-        if (nombre != null && !nombre.trim().isEmpty()
+        if (nombre != null && !nombre.isEmpty()
                 && !invitados.contains(nombre)) {
-
-            invitados.add(nombre);
+                invitados.add(nombre);
         }
     }
 
@@ -252,13 +247,7 @@ public class Podcast extends Contenido implements IDescargable,IReproducible {
     @Override
     public int espacioRequerido() {
 
-        int minutos = duracionSegundos / 60;
-
-        if (minutos == 0) {
-            minutos = 1;
-        }
-
-        return minutos;
+        return (duracionSegundos/60)+1;
     }
 
 
