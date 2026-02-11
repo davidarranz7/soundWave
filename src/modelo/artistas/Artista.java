@@ -128,22 +128,27 @@ public class Artista {
         albumes.add(nuevo);
         return nuevo;
     }
-    //preguntar profe
+
     public ArrayList<Cancion> obtenerTopCanciones(int cantidad){
         ArrayList<Cancion> topCanciones = new ArrayList<>(discografia);
-        topCanciones.sort((c1, c2) -> Integer.compare(c2.getReproducciones(), c1.getReproducciones()));
-        return new ArrayList<>(topCanciones.subList(0, Math.min(cantidad, topCanciones.size())));
+        topCanciones.sort((c1, c2) -> c2.getReproducciones() - c1.getReproducciones());
+
+        if(cantidad >= topCanciones.size()) {
+            return topCanciones;
+        }
+
+        return new ArrayList<>(topCanciones.subList(0, cantidad));
     }
 
     public double calcularPromedioReproducciones() {
         if (discografia.isEmpty()) {
             return 0;
         }
-        int total = 0;
+        int totalReproducciones = 0;
         for (Cancion c : discografia) {
-            total += c.getReproducciones();
+            totalReproducciones += c.getReproducciones();
         }
-        return (double) total / discografia.size();
+        return (double) totalReproducciones / discografia.size();
     }
 
     public boolean esVerificado() {

@@ -126,9 +126,7 @@ public class Album {
         if (canciones.size() >= MAX_CANCIONES) {
             throw new AlbumCompletoException("El álbum está completo");
         }
-        Cancion nueva = new Cancion(titulo, duracionSegundos, genero, artista);
-        nueva.setLetra(letra);
-        nueva.setExplicit(explicit);
+        Cancion nueva = new Cancion(titulo, duracionSegundos, genero, artista, letra, explicit);
         canciones.add(nueva);
         return nueva;
     }
