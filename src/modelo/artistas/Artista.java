@@ -173,14 +173,23 @@ public class Artista {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Artista{" + "id='" + id + '\'' +
+                ", nombreArtistico='" + nombreArtistico + ", nombreReal='" + nombreReal +
+                ", paisOrigen='" + paisOrigen +
+                ", oyentesMensuales=" + oyentesMensuales +
+                ", verificado=" + verificado + '}';
     }
 
     //
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Artista artista = (Artista) obj;
+        return id.equals(artista.id);
     }
+
 
     @Override
     public int hashCode() {

@@ -24,7 +24,6 @@ public class Album {
 
     //constructor
 
-
     public Album(String titulo, Artista artista, Date fechaLanzamiento) {
         this.id = UUID.randomUUID().toString();;
         this.titulo = titulo;
@@ -116,9 +115,9 @@ public class Album {
         if (canciones.size() >= MAX_CANCIONES) {
             throw new AlbumCompletoException("El álbum está completo");
         }
-        Cancion nueva = new Cancion(titulo, duracionSegundos, genero, artista);
-        canciones.add(nueva);
-        return nueva;
+        Cancion cancion = new Cancion(titulo, duracionSegundos, genero, this.artista);
+        canciones.add(cancion);
+        return cancion;
     }
 
     public Cancion crearCancion(String titulo, int duracionSegundos,GeneroMusical genero, String letra, boolean explicit)
@@ -139,8 +138,6 @@ public class Album {
         }
         Cancion cancion = canciones.remove(posicion -1);
         cancion.setAlbum(null);
-
-
     }
 
     public void eliminarCancion(Cancion cancion) throws CancionNoEncontradaException {
@@ -164,8 +161,13 @@ public class Album {
 
     public String getDuracionTotalFormateada(){
         int duracionTotalSegundos = getDuracionTotal();
-        int minutos = duracionTotalSegundos / 60;
+        int horas = duracionTotalSegundos / 3600;
+        int minutos = (duracionTotalSegundos / 60) % 60;
         int segundos = duracionTotalSegundos % 60;
+
+        if (horas > 0) {
+            return String.format("%d:%02d:%02d", horas, minutos, segundos);
+        }
         return String.format("%02d:%02d", minutos, segundos);
     }
 
@@ -201,17 +203,29 @@ public class Album {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Album{" +
+                "id='" + id + '\'' +
+                ", titulo='" + titulo + '\'' +
+                ", artista=" + artista.getNombreArtistico() +
+                ", fecha=" + fechaLanzamiento +
+                ", canciones=" + canciones.size() +
+                '}';
     }
+
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Album album = (Album) obj;
+        return id.equals(album.id);
     }
+
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return id.hashCode();
     }
 }
 

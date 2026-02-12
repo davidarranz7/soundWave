@@ -4,6 +4,7 @@ import excepciones.contenido.DuracionInvalidaException;
 
 import java.util.*;
 
+//FINALIZADO SOLO REVISAR LOS OVERRIDER!!!
 public abstract class Contenido {
 
     protected String id;
@@ -77,6 +78,8 @@ public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlags
     //metodo abstracto
     public abstract void reproducir() throws ContenidoNoDisponibleException;
 
+
+
     //metodos propios
 
     public void  aumentarReproducciones(){
@@ -99,14 +102,26 @@ public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlags
 
 
     public void agregarTag(String tag) {
-        if ( tag!= null && !tag.trim().isEmpty() && !tags.contains(tag)) {
-            tags.add(tag.toLowerCase());
+        if(tag == null) {
+            return;//lo hacemos para que si una persona manda un tag vacio no se pueda agregar!!
+        }
+        String limpio = tag.trim().toLowerCase();//esto se hace para que si una persona manda un tag con espacios o mayusculas se pueda agregar igual!! y no se duplique por eso mismo!!
+
+        if (!limpio.isEmpty() && !tags.contains(limpio)) {
+            tags.add(limpio);
         }
     }
 
     public boolean tieneTag(String tag) {
-        //if (tag == null) return false;
-        return tags.contains(tag.toLowerCase());
+        if(tag == null){
+            return false;
+        }
+        String limpio = tag.trim().toLowerCase();
+
+        if(limpio.isEmpty()) {
+            return false;
+        }
+        return tags.contains(limpio);
     }
 
     public void marcarNoDisponible() {

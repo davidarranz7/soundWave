@@ -8,6 +8,7 @@ import utilidades.EstadisticasCreador;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Creador {
 
@@ -23,7 +24,7 @@ public class Creador {
 
 
     public Creador(String nombreCanal, String nombre) {
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.nombreCanal = nombreCanal;
         this.nombre = nombre;
         this.episodios = new ArrayList<>();
@@ -34,7 +35,7 @@ public class Creador {
     }
 
     public Creador(String nombreCanal, String nombre, String descripcion) {
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.nombreCanal = nombreCanal;
         this.nombre = nombre;
         this.episodios = new ArrayList<>();
@@ -107,10 +108,9 @@ public class Creador {
         episodios.add(episodio);
     }
 
-    //falta logica
 
     public EstadisticasCreador obtenerEstadisticas(){
-        return null;
+        return new EstadisticasCreador(this);
     }
 
 
@@ -118,7 +118,6 @@ public class Creador {
         redesSociales.put(red, usuario);
     }
 
-    //revisar logica
     public double calcularPromedioReproducciones(){
         if (episodios.isEmpty()) {
             return 0.0;
@@ -145,8 +144,19 @@ public class Creador {
 
     //ver logica
     public ArrayList<Podcast> obtenerTopEpisodios(int cantidad) {
-        return null;
+        ArrayList<Podcast> copia = new ArrayList<>(episodios);
+        copia.sort((p1, p2) ->
+                Integer.compare(
+                        p2.getReproducciones(),
+                        p1.getReproducciones()
+                )
+        );
+        if (cantidad >= copia.size()) {
+            return copia;
+        }
+        return new ArrayList<>(copia.subList(0, cantidad));
     }
+
 
     public int getUltimaTemporada(){
         if (episodios.isEmpty()) {
@@ -158,19 +168,29 @@ public class Creador {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Creador{" +
+                "id='" + id + '\'' +
+                ", canal='" + nombreCanal + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", suscriptores=" + suscriptores +
+                ", episodios=" + episodios.size() +
+                '}';
     }
+
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Creador creador = (Creador) obj;
+        return id.equals(creador.id);
     }
+
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return id.hashCode();
     }
-
-
 
 }

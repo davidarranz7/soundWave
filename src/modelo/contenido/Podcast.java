@@ -222,7 +222,6 @@ public class Podcast extends Contenido implements IDescargable,IReproducible {
     //preguntar!!!
     @Override
     public boolean descargar() throws LimiteDescargasException, ContenidoYaDescargadoException {
-
         if (descargado) {
             throw new ContenidoYaDescargadoException("El contenido ya está descargado");
         }
@@ -243,7 +242,6 @@ public class Podcast extends Contenido implements IDescargable,IReproducible {
         return false;
     }
 
-    //preguntar!!!
     @Override
     public int espacioRequerido() {
 

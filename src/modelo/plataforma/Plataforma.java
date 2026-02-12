@@ -45,14 +45,14 @@ public class Plataforma {
 
     public Plataforma(String nombre) {
         this.nombre = nombre;
-        this.usuarios = new HashMap<>(usuarios);
-        this.usuarioPorEmail = new HashMap<>(usuarioPorEmail);
-        this.catalogo = new ArrayList<>(catalogo);
-        this.playlistsPublicas = new ArrayList<>(playlistsPublicas);
-        this.artistas = new HashMap<>(artistas);
-        this.creadores = new HashMap<>(creadores);
-        this.albumes = new ArrayList<>(albumes);
-        this.anuncios = new ArrayList<>(anuncios);
+        this.usuarios = new HashMap<>();
+        this.usuarioPorEmail = new HashMap<>();
+        this.catalogo = new ArrayList<>();
+        this.playlistsPublicas = new ArrayList<>();
+        this.artistas = new HashMap<>();
+        this.creadores = new HashMap<>();
+        this.albumes = new ArrayList<>();
+        this.anuncios = new ArrayList<>();
         this.recomendador = recomendador;
         this.totalAnuncioReproducidos = totalAnuncioReproducidos;
     }
@@ -118,42 +118,87 @@ public class Plataforma {
     //metodos usuarios
 
     public UsuarioPremium registrarUsuarioPremium(String nombre, String email, String password, TipoSuscripcion tipo) throws UsuarioYaExisteException, EmailInvalidoException, PasswordDebilException {
-        return null;
+        if (usuarioPorEmail.containsKey(email)){
+            throw new UsuarioYaExisteException("El email ya está registrado: " + email);
+        }
+        UsuarioPremium nuevoUsuario = new UsuarioPremium(nombre, email, password, tipo);
+        usuarios.put(nuevoUsuario.getId(),nuevoUsuario);
+        usuarioPorEmail.put(email,nuevoUsuario);
+        return nuevoUsuario;
     }
 
     public UsuarioPremium registrarUsuarioPremium(String nombre, String email, String password) throws UsuarioYaExisteException, EmailInvalidoException, PasswordDebilException {
-        return null;
+        return registrarUsuarioPremium(nombre, email, password, TipoSuscripcion.PREMIUM);
     }
 
-    public UsuarioGratuito registrarUsuarioGratuito(String nombre, String email, String password) throws UsuarioYaExisteException, EmailInvalidoException, PasswordDebilException{
-        return null;
+    public UsuarioGratuito registrarUsuarioGratuito(String nombre,
+                                                    String email,
+                                                    String password)
+            throws UsuarioYaExisteException, EmailInvalidoException, PasswordDebilException {
+
+        if (usuarioPorEmail.containsKey(email)) {
+            throw new UsuarioYaExisteException("El email ya está registrado: " + email);
+        }
+
+        UsuarioGratuito nuevoUsuario = new UsuarioGratuito(nombre, email, password);
+
+        usuarios.put(nuevoUsuario.getId(), nuevoUsuario);
+        usuarioPorEmail.put(email, nuevoUsuario);
+
+        return nuevoUsuario;
     }
 
-    public ArrayList<UsuarioPremium> getUsuariopremium(){
-        return null;
+    public ArrayList<UsuarioPremium> getUsuariosPremium() {
+        ArrayList<UsuarioPremium> premium = new ArrayList<>();
+        for (Usuario usuario : usuarios.values()) {
+            if (usuario instanceof UsuarioPremium) {
+                premium.add((UsuarioPremium) usuario);
+            }
+        }
+        return premium;
     }
 
-    public ArrayList<UsuarioGratuito> getUsuarioGratuito(){
-        return null;
+
+    public ArrayList<UsuarioGratuito> getUsuariosGratuitos(){
+        ArrayList<UsuarioGratuito> gratuito = new ArrayList<>();
+        for (Usuario usuario : usuarios.values()) {
+            if (usuario instanceof UsuarioGratuito) {
+                gratuito.add((UsuarioGratuito) usuario);
+            }
+        }
+        return gratuito;
     }
 
-    public ArrayList<Usuario> getTodosLosUsuarios(){
-        return null;
+    public ArrayList<Usuario> getTodosLosUsuarios() {
+        return new ArrayList<>(usuarios.values());
     }
 
-    public Usuario buscarUsuarioPorEmail(String email){
-        return null;
+
+    public Usuario buscarUsuarioPorEmail(String email) {
+
+        return usuarioPorEmail.get(email);
     }
+
 
     //gestionArtista
 
-    public Artista registrarArtista(String nombreArtisto,String nombreReal, String paisorigen, boolean verificado){
-        return null;
+    public Artista registrarArtista(String nombreArtistico,String nombreReal, String paisOrigen, boolean verificado){
+        Artista artista = new Artista(nombreArtistico, nombreReal, paisOrigen);
+        if (verificado) {
+            artista.verificar();
+        }
+        artistas.put(artista.getId(), artista);
+        return artista;
     }
 
-    public void registrarArtista(Artista artista){
+    public void registrarArtista(Artista artista) {
 
+        if (artista == null) {
+            return;
+        }
+        artistas.put(artista.getId(), artista);
     }
+
 
     public ArrayList<Artista> getArtistasVerificados(){
         return null;

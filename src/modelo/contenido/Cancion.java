@@ -150,10 +150,9 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
 
     public String obtenerLetra() throws LetraNoDisponibleException {
 
-        if (letra == null || letra.isEmpty()) {
+        if (letra == null || letra.trim().isEmpty()) {
             throw new LetraNoDisponibleException("La canción no tiene letra disponible");
         }
-
         return letra;
     }
 
@@ -224,11 +223,12 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
 
     //overide de IDescargable
     @Override
-    public boolean descargar() throws ContenidoYaDescargadoException {
+    public boolean descargar() throws ContenidoYaDescargadoException,LimiteDescargasException {
 
         if (descargado) {
             throw new ContenidoYaDescargadoException("El contenido ya está descargado");
         }
+
 
         descargado = true;
         return true;
