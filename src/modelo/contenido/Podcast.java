@@ -7,14 +7,12 @@ import excepciones.contenido.EpisodioNoEncontradoException;
 import excepciones.contenido.TranscripcionNoDisponibleException;
 import excepciones.descarga.ContenidoYaDescargadoException;
 import excepciones.descarga.LimiteDescargasException;
-import interfaces.IDescargable;
-import interfaces.IReproducible;
+import interfaces.Descargable;
+import interfaces.Reproducible;
 import modelo.artistas.Creador;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.DuplicateFormatFlagsException;
 
-public class Podcast extends Contenido implements IDescargable,IReproducible {
+public class Podcast extends Contenido implements Descargable, Reproducible {
 
     private Creador creador;
     private int numeroEpisodio;
@@ -49,7 +47,7 @@ public class Podcast extends Contenido implements IDescargable,IReproducible {
         this.creador = creador;
         this.numeroEpisodio = numeroEpisodio;
         this.temporada = temporada;
-        this.descripcion = null;
+        this.descripcion = descripcion;
         this.categoria = categoria;
         this.invitados = new ArrayList<>();
         this.transcripcion = null;
@@ -249,6 +247,7 @@ public class Podcast extends Contenido implements IDescargable,IReproducible {
     }
 
 
+    //overrides
 
     @Override
     public String toString() {

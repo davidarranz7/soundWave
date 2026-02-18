@@ -24,22 +24,22 @@ public class Album {
 
     //constructor
 
-    public Album(String titulo, Artista artista, Date fechaLanzamiento) {
-        this.id = UUID.randomUUID().toString();;
-        this.titulo = titulo;
-        this.artista = artista;
-        this.fechaLanzamiento = fechaLanzamiento;
-        this.canciones = new ArrayList<>();
-    }
-
     public Album(String titulo, Artista artista, Date fechaLanzamiento, String discografica, String tipoAlbum) {
-        this.id = UUID.randomUUID().toString();;
+        this.id = UUID.randomUUID().toString();
         this.titulo = titulo;
         this.artista = artista;
         this.fechaLanzamiento = fechaLanzamiento;
         this.canciones = new ArrayList<>();
         this.discografica = discografica;
         this.tipoAlbum = tipoAlbum;
+    }
+
+    public Album(String titulo, Artista artista, Date fechaLanzamiento) {
+        this.id = UUID.randomUUID().toString();
+        this.titulo = titulo;
+        this.artista = artista;
+        this.fechaLanzamiento = fechaLanzamiento;
+        this.canciones = new ArrayList<>();
     }
 
     //getters y setters
@@ -116,7 +116,9 @@ public class Album {
             throw new AlbumCompletoException("El álbum está completo");
         }
         Cancion cancion = new Cancion(titulo, duracionSegundos, genero, this.artista);
+        cancion.setAlbum(this);
         canciones.add(cancion);
+        artista.publicarCancion(cancion);
         return cancion;
     }
 
@@ -200,6 +202,7 @@ public class Album {
         return total;
     }
 
+    //overrides
 
     @Override
     public String toString() {

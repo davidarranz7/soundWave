@@ -9,18 +9,20 @@ public class EstadisticasCreador {
 
     private Creador creador;
     private int totalEpisodios;
-    private int totatReproducciones;
+    private int totalReproducciones;
     private double promedioReproducciones;
     private int totalSuscriptores;
     private int totalLikes;
     private int duracionTotalSegundos;
     private Podcast episodioMasPopular;
-    private HashMap<Integer, Integer> episodiosPorTemporada; // Clave: Mes (1-12), Valor: Total de reproducciones
+    private HashMap<Integer, Integer> episodiosPorTemporada;
 
+    //constructor
 
     public EstadisticasCreador(Creador creador) {
         this.creador = creador;
         this.episodiosPorTemporada = new HashMap<>();
+        calcularEstadisticas();
     }
 
     //getters y setters
@@ -33,8 +35,8 @@ public class EstadisticasCreador {
         return totalEpisodios;
     }
 
-    public int getTotatReproducciones() {
-        return totatReproducciones;
+    public int getTotalReproducciones() {
+        return totalReproducciones;
     }
 
     public double getPromedioReproducciones() {
@@ -63,9 +65,33 @@ public class EstadisticasCreador {
 
     //metodos privados
 
-    //revisar logica
     private void calcularEstadisticas() {
+        this.totalEpisodios = creador.getNumEpisodios();
+        this.totalSuscriptores = creador.getSuscriptores();
+        this.totalReproducciones = 0;
+        this.totalLikes = 0;
+        this.duracionTotalSegundos = 0;
+        this.episodioMasPopular = null;
+        int maxReproducciones = 0;
 
+        for (Podcast podcast : creador.getEpisodios()) {
+            this.totalReproducciones += podcast.getReproducciones();
+            this.totalLikes += podcast.getLikes();
+            this.duracionTotalSegundos += podcast.getDuracionSegundos();
+
+            if (podcast.getReproducciones() > maxReproducciones) {
+                maxReproducciones = podcast.getReproducciones();
+                this.episodioMasPopular = podcast;
+            }
+
+            // Contar episodios por temporada
+            int temporada = podcast.getTemporada();
+            episodiosPorTemporada.put(temporada, episodiosPorTemporada.getOrDefault(temporada, 0) + 1);
+        }
+
+        if (totalEpisodios > 0) {
+            this.promedioReproducciones = (double) totalReproducciones / totalEpisodios;
+        }
     }
     //revisar logica
     private String formatearDuracion(int segundos){
@@ -74,19 +100,21 @@ public class EstadisticasCreador {
         int segs = segundos % 60;
         return String.format("%02d:%02d:%02d", horas, minutos, segs);
     }
-    public String generarReporte(){
-        StringBuilder reporte = new StringBuilder();
-        reporte.append("Estadísticas del Creador: ").append(creador.getNombre()).append("\n");
-        reporte.append("Total de Episodios: ").append(totalEpisodios).append("\n");
-        reporte.append("Total de Reproducciones: ").append(totatReproducciones).append("\n");
-        reporte.append("Promedio de Reproducciones por Episodio: ").append(String.format("%.2f", promedioReproducciones)).append("\n");
-        reporte.append("Total de Suscriptores: ").append(totalSuscriptores).append("\n");
-        reporte.append("Total de Likes: ").append(totalLikes).append("\n");
-        reporte.append("Duración Total: ").append(formatearDuracion(duracionTotalSegundos)).append("\n");
+
+    //metodos publicos
+    public String generarReporte() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== REPORTE DE ESTADÍSTICAS ===\n");
+        sb.append("Canal: ").append(creador.getNombreCanal()).append("\n");
+        sb.append("Total Episodios: ").append(totalEpisodios).append("\n");
+        sb.append("Total Suscriptores: ").append(totalSuscriptores).append("\n");
+        sb.append("Total Reproducciones: ").append(totalReproducciones).append("\n");
+        sb.append("Promedio Reproducciones: ").append(String.format("%.2f", promedioReproducciones)).append("\n");
+        sb.append("Duración Total: ").append(formatearDuracion(duracionTotalSegundos)).append("\n");
         if (episodioMasPopular != null) {
-            reporte.append("Episodio Más Popular: ").append(episodioMasPopular.getTitulo()).append(" con ").append(episodioMasPopular.getReproducciones()).append(" reproducciones\n");
+            sb.append("Episodio Más Popular: ").append(episodioMasPopular.getTitulo()).append("\n");
         }
-        return reporte.toString();
+        return sb.toString();
     }
 
     public double calcularEngagement(){
@@ -96,8 +124,10 @@ public class EstadisticasCreador {
 
     public int estimacionCrecimientoMensual(){
         //revisar logica
-        return 0;
+        return (int) (promedioReproducciones * 0.1);
     }
+
+    //overrides
 
     @Override
     public String toString() {

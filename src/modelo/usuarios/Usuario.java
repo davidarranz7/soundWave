@@ -3,6 +3,7 @@ package modelo.usuarios;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 import enums.TipoSuscripcion;
 import excepciones.contenido.ContenidoNoDisponibleException;
@@ -26,17 +27,26 @@ public abstract class  Usuario {
     protected ArrayList<Contenido> contenidosLiked;
     private static final int LIMITE_HISTORIAL = 1000;
 
-
+// Constructor
 
     public Usuario(String nombre, String email, String password, TipoSuscripcion suscripcion) throws EmailInvalidoException, PasswordDebilException {
-        this.id = id;
+
+        if (email == null || !email.contains("@") || !email.contains(".")) {
+            throw new EmailInvalidoException("El email no es válido: " + email);
+        }
+
+        if (password == null || password.length() < 8) {
+            throw new PasswordDebilException("La contraseña es demasiado débil. Debe tener al menos 8 caracteres.");
+        }
+
+        this.id = UUID.randomUUID().toString();
         this.nombre = nombre;
         this.email = email;
         this.password = password;
         this.suscripcion = suscripcion;
         this.misPlaylists = new ArrayList<>();
         this.historial = new ArrayList<>();
-        this.fechaRegistro = fechaRegistro;
+        this.fechaRegistro = new Date();
         this.playlistsSeguidas = new ArrayList<>();
         this.contenidosLiked = new ArrayList<>();
     }
@@ -117,20 +127,35 @@ public abstract class  Usuario {
     }
 
     public void seguirPlaylist(Playlist playlist){
-        if (!playlistsSeguidas.contains(playlist)){
-            playlistsSeguidas.add(playlist);
+        if (playlist != null && playlist.isEsPublica()) {
+            if (!playlistsSeguidas.contains(playlist)){
+                playlistsSeguidas.add(playlist);
+                playlist.incrementarSeguidores();
+            }
         }
+    }
+
+
+    public void dejarDeSeguirPlaylist(Playlist playlist){
+        playlistsSeguidas.remove(playlist);
     }
 
     //logica
     public void darLike(Contenido contenido){
 
 
+        if (contenido != null && !contenidosLiked.contains(contenido)) {
+            contenidosLiked.add(contenido);
+            contenido.agregarLike();
+        }
     }
 
     public void quitarLike(Contenido contenido){
 
 
+        if (contenido != null && contenidosLiked.contains(contenido)) {
+            contenidosLiked.remove(contenido);
+        }
     }
 
 
@@ -148,7 +173,7 @@ public abstract class  Usuario {
         return true;
     }
 
-    public void agregarHistorial(Contenido contenido) {
+    public void agregarAlHistorial(Contenido contenido) {
 
         if (historial.contains(contenido)) {
             return;
@@ -169,6 +194,7 @@ public abstract class  Usuario {
         return suscripcion == TipoSuscripcion.PREMIUM;
     }
 
+    //overrides
 
     @Override
     public String toString() {

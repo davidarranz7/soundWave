@@ -33,7 +33,7 @@ public enum CategoriaPodcast {
 
     @Override
     public String toString() {
-        return this.getNombre();
+        return nombre;
     }
 
 }

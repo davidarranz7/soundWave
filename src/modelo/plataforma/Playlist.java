@@ -9,6 +9,7 @@ import modelo.usuarios.Usuario;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 public class Playlist {
 
@@ -24,30 +25,33 @@ public class Playlist {
     private int maxContenidos;
     private static final int MAX_CONTNIDOS_DEFAULT = 500;
 
+    //constructores
+
+
     public Playlist(String nombre, Usuario creador) {
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.nombre = nombre;
         this.creador = creador;
-        this.contenidos = new ArrayList<>(contenidos);
-        this.esPublica = esPublica;
-        this.seguidores = seguidores;
-        this.descripcion = descripcion;
-        this.portadaURL = portadaURL;
-        this.fechaCreacion = fechaCreacion;
-        this.maxContenidos = maxContenidos;
+        this.contenidos = new ArrayList<>();
+        this.esPublica = false;
+        this.seguidores = 0;
+        this.descripcion = "";
+        this.portadaURL = "";
+        this.fechaCreacion = new Date();
+        this.maxContenidos = MAX_CONTNIDOS_DEFAULT;
     }
 
-    public Playlist(String nombre, Usuario creador, boolean esPublica,String descripcion) {
-        this.id = id;
+    public Playlist(String nombre, Usuario creador, boolean esPublica, String descripcion) {
+        this.id = UUID.randomUUID().toString();
         this.nombre = nombre;
         this.creador = creador;
-        this.contenidos = new ArrayList<>(contenidos);
+        this.contenidos = new ArrayList<>();
         this.esPublica = esPublica;
-        this.seguidores = seguidores;
+        this.seguidores = 0;
         this.descripcion = descripcion;
-        this.portadaURL = portadaURL;
-        this.fechaCreacion = fechaCreacion;
-        this.maxContenidos = maxContenidos;
+        this.portadaURL = "";
+        this.fechaCreacion = new Date();
+        this.maxContenidos = MAX_CONTNIDOS_DEFAULT;
     }
 
     //getters y setters
@@ -116,35 +120,79 @@ public class Playlist {
     //metodos propios
 
     public void agregarContenido(Contenido contenido) throws PlaylistLlenaException, ContenidoDuplicadoException {
-
+        if (contenidos.size() >= maxContenidos) {
+            throw new PlaylistLlenaException("La playlist está llena");
+        }
+        if (contenidos.contains(contenido)) {
+            throw new ContenidoDuplicadoException("El contenido ya existe en la playlist");
+        }
+        contenidos.add(contenido);
     }
 
     public boolean eliminarContenido(String idContenido) {
+        for (Contenido contenido : contenidos) {
+            if (contenido.getId().equals(idContenido)) {
+                return contenidos.remove(contenido);
+            }
+        }
         return false;
     }
 
     public boolean eliminarContenido(Contenido contenido) {
-        return false;
+        return contenidos.remove(contenido);
     }
 
-    public void ordenarpor(CriterioOrden criterio) throws PlaylistVaciaException{
+    public void ordenarPor(CriterioOrden criterio) throws PlaylistVaciaException{
+        if (contenidos.isEmpty()) {
+            throw new PlaylistVaciaException("La playlist está vacía");
+        }
 
+        if (criterio == CriterioOrden.POPULARIDAD) {
+            contenidos.sort((c1, c2) -> Integer.compare(c2.getReproducciones(), c1.getReproducciones()));
+        } else if (criterio == CriterioOrden.DURACION) {
+            contenidos.sort((c1, c2) -> Integer.compare(c1.getDuracionSegundos(), c2.getDuracionSegundos()));
+        } else if (criterio == CriterioOrden.FECHA_AGREGADO) {
+            contenidos.sort((c1, c2) -> c1.getFechaPublicacion().compareTo(c2.getFechaPublicacion()));
+        } else if (criterio == CriterioOrden.ALFABETICO) {
+            contenidos.sort((c1, c2) -> c1.getTitulo().compareTo(c2.getTitulo()));
+        } else if (criterio == CriterioOrden.ALEATORIO) {
+            shuffle();
+        }
     }
 
     public int getDuracionTotal(){
-        return 0;
+        return contenidos.stream().mapToInt(Contenido::getDuracionSegundos).sum();
     }
 
     public String getDuracionTotalFormateada(){
-        return "";
+        int duracionTotalSegundos = getDuracionTotal();
+        int horas = duracionTotalSegundos / 3600;
+        int minutos = (duracionTotalSegundos / 60) % 60;
+        int segundos = duracionTotalSegundos % 60;
+
+        if (horas > 0) {
+            return String.format("%d:%02d:%02d", horas, minutos, segundos);
+        }
+        return String.format("%02d:%02d", minutos, segundos);
     }
 
     public void shuffle(){
-
+        for (int i = contenidos.size() - 1; i > 0; i--) {
+            int j = (int) (Math.random() * (i + 1));
+            Contenido temp = contenidos.get(i);
+            contenidos.set(i, contenidos.get(j));
+            contenidos.set(j, temp);
+        }
     }
 
      public ArrayList<Contenido> buscarContenido(String titulo) {
-         return new ArrayList<>();
+         ArrayList<Contenido> resultados = new ArrayList<>();
+         for (Contenido contenido : contenidos) {
+             if (contenido.getTitulo().toLowerCase().contains(titulo.toLowerCase())) {
+                 resultados.add(contenido);
+             }
+         }
+         return resultados;
      }
 
      public void hacerPublica(){

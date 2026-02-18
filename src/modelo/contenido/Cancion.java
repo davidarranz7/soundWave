@@ -7,14 +7,14 @@ import excepciones.contenido.DuracionInvalidaException;
 import excepciones.contenido.LetraNoDisponibleException;
 import excepciones.descarga.ContenidoYaDescargadoException;
 import excepciones.descarga.LimiteDescargasException;
-import interfaces.IDescargable;
-import interfaces.IReproducible;
+import interfaces.Descargable;
+import interfaces.Reproducible;
 import modelo.artistas.Album;
 import modelo.artistas.Artista;
-import java.util.ConcurrentModificationException;
+
 import java.util.UUID;
 
-public class Cancion extends Contenido implements IDescargable, IReproducible {
+public class Cancion extends Contenido implements Descargable, Reproducible {
 
     private String letra;
     private Artista artista;
@@ -27,6 +27,8 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
     private boolean pausado;
     private boolean descargado;
 
+
+    //constructores
 
     public Cancion(String titulo, int duracionSegundos, GeneroMusical genero, Artista artista)
             throws DuracionInvalidaException {
@@ -49,16 +51,17 @@ public class Cancion extends Contenido implements IDescargable, IReproducible {
         super(titulo, duracionSegundos);
         this.artista = artista;
         this.genero = genero;
-        this.letra = null;
+        this.letra = letra;
         this.album = null;
         this.audioURL = "https://soundwave.com/audio/" + id + ".mp3";
-        this.explicit = false;
+        this.explicit = explicit;
         this.ISRC = generarISRC();
         this.reproduciendo = false;
         this.pausado = false;
         this.descargado = false;
     }
 
+    //getters y setters
 
     public String getLetra() {
         return letra;

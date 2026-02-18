@@ -19,31 +19,32 @@ public class Creador {
     private int suscriptores;
     private String descripcion;
     private HashMap<String,String>redesSociales;
-    private ArrayList<CategoriaPodcast>categoriaPodcasts;
+    private ArrayList<CategoriaPodcast>categoriasPrincipales;
     private static final int MAX_EPISODIOS = 500;
 
+
+    //constructores
 
     public Creador(String nombreCanal, String nombre) {
         this.id = UUID.randomUUID().toString();
         this.nombreCanal = nombreCanal;
         this.nombre = nombre;
         this.episodios = new ArrayList<>();
-        this.suscriptores = 0;
-        this.descripcion = "";
         this.redesSociales = new HashMap<>();
-        this.categoriaPodcasts = new ArrayList<>();
+        this.categoriasPrincipales = new ArrayList<>();
     }
 
     public Creador(String nombreCanal, String nombre, String descripcion) {
         this.id = UUID.randomUUID().toString();
         this.nombreCanal = nombreCanal;
         this.nombre = nombre;
-        this.episodios = new ArrayList<>();
-        this.suscriptores = 0;
         this.descripcion = descripcion;
+        this.episodios = new ArrayList<>();
         this.redesSociales = new HashMap<>();
-        this.categoriaPodcasts = new ArrayList<>();
+        this.categoriasPrincipales = new ArrayList<>();
     }
+
+    //getters y setters
 
     public String getId() {
         return id;
@@ -89,8 +90,8 @@ public class Creador {
         return new HashMap<>(redesSociales);
     }
 
-    public ArrayList<CategoriaPodcast> getCategoriaPodcasts() {
-        return new ArrayList<>(categoriaPodcasts);
+    public ArrayList<CategoriaPodcast> getCategoriasPrincipales() {
+        return new ArrayList<>(categoriasPrincipales);
     }
 
     public int getNumEpisodios(){
@@ -98,7 +99,7 @@ public class Creador {
     }
 
 
-    //metodos
+    //metodos propios
 
     public void publicarPodcast(Podcast episodio) throws LimiteEpisodiosException {
         if (episodios.size() >= MAX_EPISODIOS) {
@@ -115,7 +116,7 @@ public class Creador {
 
 
     public void agregarRedSocial(String red, String usuario) {
-        redesSociales.put(red, usuario);
+        redesSociales.put(red.toLowerCase(), usuario);
     }
 
     public double calcularPromedioReproducciones(){
@@ -164,6 +165,8 @@ public class Creador {
         }
         return episodios.stream().mapToInt(Podcast::getTemporada).max().orElse(0);
     }
+
+    //overrides
 
 
     @Override

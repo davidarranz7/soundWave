@@ -8,10 +8,7 @@ import excepciones.usuario.EmailInvalidoException;
 import excepciones.usuario.LimiteDiarioAlcanzadoException;
 import excepciones.usuario.PasswordDebilException;
 import modelo.contenido.Contenido;
-import modelo.plataforma.Playlist;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
+import modelo.plataforma.Anuncio;
 import java.util.Date;
 
 public class UsuarioGratuito extends Usuario{
@@ -36,7 +33,6 @@ public class UsuarioGratuito extends Usuario{
 
     // Getters y Setters
 
-
     public int getAnunciosEscuchados() {
         return anunciosEscuchados;
     }
@@ -58,11 +54,11 @@ public class UsuarioGratuito extends Usuario{
     }
 
 
-    public int getCancionesSinAnuncios() {
+    public int getCancionesSinAnuncio() {
         return cancionesSinAnuncios;
     }
 
-    public void setCancionesSinAnuncios(int cancionesSinAnuncios) {
+    public void setCancionesSinAnuncio(int cancionesSinAnuncios) {
         this.cancionesSinAnuncios = cancionesSinAnuncios;
     }
 
@@ -73,12 +69,22 @@ public class UsuarioGratuito extends Usuario{
 
     //ver logica
     public void verAnuncio() {
-
+        anunciosEscuchados++;
+        cancionesSinAnuncios = 0;
     }
 
     //anuncio preguntas
     public void verAnuncio(TipoAnuncio anuncio){
+        anunciosEscuchados++;
+        cancionesSinAnuncios = 0;
+    }
 
+    public void verAnuncio(Anuncio anuncio){
+        if (anuncio != null) {
+            anuncio.reproducir();
+            anunciosEscuchados++;
+            cancionesSinAnuncios = 0;
+        }
     }
 
 
@@ -91,32 +97,48 @@ public class UsuarioGratuito extends Usuario{
     }
 
     public void reiniciarContadorDiario(){
-        if(fechaUltimaReproduccion == null || !fechaUltimaReproduccion.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate().equals(LocalDate.now())){
-            reproduccionesHoy = 0;
-            fechaUltimaReproduccion = new Date();
-        }
+        this.reproduccionesHoy = 0;
     }
+
 
 
     public int getReproduccionesRestantes() {
         return Math.max(0, limiteReproducciones - reproduccionesHoy);
     }
 
-    public int getCancionesEntreAnuncios() {
+    public int getCancionesHastaAnuncio() {
         return Math.max(0, CANCIONES_ENTRE_ANUNCIOS - cancionesSinAnuncios);
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
+    //override de reproducir
+
 
     @Override
     public void reproducir(Contenido contenido) throws ContenidoNoDisponibleException, LimiteDiarioAlcanzadoException, AnuncioRequeridoException {
+        if (!contenido.isDisponible()) {
+            throw new ContenidoNoDisponibleException("El contenido no está disponible");
+        }
 
+        if (!puedeReproducir()) {
+            throw new LimiteDiarioAlcanzadoException("Has alcanzado el límite diario de reproducciones");
+        }
+
+        if (debeVerAnuncio()) {
+            throw new AnuncioRequeridoException("Debes ver un anuncio para continuar reproduciendo");
+        }
+
+        contenido.aumentarReproducciones();
+        reproduccionesHoy++;
+        cancionesSinAnuncios++;
+        agregarAlHistorial(contenido);
     }
 
+    //overide
 
+    @Override
+    public String toString() {
+        return "UsuarioGratuito{nombre='" + nombre + "', email='" + email + "', reproduccionesHoy=" + reproduccionesHoy + "}";
+    }
 
 
 

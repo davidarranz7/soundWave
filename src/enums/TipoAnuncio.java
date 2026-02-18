@@ -25,6 +25,9 @@ public enum TipoAnuncio {
 
     @Override
     public String toString() {
-        return name() + " (Duración: " + duracionSegundos + "s" ;
+        return "TipoAnuncio{" +
+                "duracionSegundos=" + duracionSegundos +
+                ", costoPorImpresion=" + costoPorImpresion +
+                '}';
     }
 }

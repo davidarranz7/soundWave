@@ -27,6 +27,6 @@ public enum CriterioOrden {
 
     @Override
     public String toString() {
-        return this.getNombre();
+        return nombre;
     }
 }

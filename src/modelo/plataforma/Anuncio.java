@@ -1,6 +1,7 @@
 package modelo.plataforma;
 
 import enums.TipoAnuncio;
+import java.util.UUID;
 
 public class Anuncio {
 
@@ -14,6 +15,7 @@ public class Anuncio {
     private boolean activo;
 
     public Anuncio(String empresa, TipoAnuncio tipo, double presupuesto) {
+        this.id = UUID.randomUUID().toString();
         this.empresa = empresa;
         this.tipo = tipo;
         this.presupuesto = presupuesto;
@@ -22,6 +24,7 @@ public class Anuncio {
     }
 
     public Anuncio(String empresa, TipoAnuncio tipo, double presupuesto, String audioURL) {
+        this.id = UUID.randomUUID().toString();
         this.empresa = empresa;
         this.tipo = tipo;
         this.presupuesto = presupuesto;
@@ -98,7 +101,7 @@ public class Anuncio {
 
 
     public void registrarImpresion() {
-///  revisar si esta bien o no
+
         if (!activo) return;
 
         impresiones++;
@@ -137,6 +140,7 @@ public class Anuncio {
         return activo && presupuesto > 0;
     }
 
+    //overider
 
     @Override
     public String toString() {

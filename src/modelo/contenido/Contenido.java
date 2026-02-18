@@ -16,9 +16,9 @@ public abstract class Contenido {
     protected boolean disponible;
     protected Date fechaPublicacion;
 
-public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlagsException {
+public Contenido(String titulo,int duracionSegundos) throws DuracionInvalidaException {
     if (duracionSegundos <=0){
-        throw new DuplicateFormatFlagsException("La duracion debe ser mayor a 0");
+        throw new DuracionInvalidaException("La duracion debe ser mayor a 0");
     }
     this.id = UUID.randomUUID().toString();
     this.titulo = titulo;
@@ -139,6 +139,9 @@ public Contenido(String titulo,int duracionSegundos) throws DuplicateFormatFlags
         int segundos = duracionSegundos % 60;
         return String.format("%d:%02d", minutos, segundos);
     }
+
+
+    //override
 
     @Override
     public String toString() {

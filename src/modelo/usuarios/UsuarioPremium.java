@@ -7,11 +7,8 @@ import excepciones.usuario.AnuncioRequeridoException;
 import excepciones.usuario.EmailInvalidoException;
 import excepciones.usuario.LimiteDiarioAlcanzadoException;
 import excepciones.usuario.PasswordDebilException;
-import interfaces.IDescargable;
 import modelo.contenido.Contenido;
-import modelo.plataforma.Playlist;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class UsuarioPremium extends Usuario {
@@ -21,20 +18,23 @@ public class UsuarioPremium extends Usuario {
     private String calidadAudio;
     private static final int MAX_DESCARGAS_DEFAULT = 100;
 
+
+    //constructores
+
     public UsuarioPremium(String nombre, String email, String password) throws EmailInvalidoException, PasswordDebilException {
         super(nombre, email, password, TipoSuscripcion.PREMIUM);
-        this.descargasOffline = descargasOffline;
-        this.maxDescargas = maxDescargas;
+        this.descargasOffline = true;
+        this.maxDescargas = MAX_DESCARGAS_DEFAULT;
         this.descargados = new ArrayList<>();
-        this.calidadAudio = calidadAudio;
+        this.calidadAudio = "ALTA";
     }
 
     public UsuarioPremium(String nombre, String email, String password, TipoSuscripcion suscripcion) throws EmailInvalidoException, PasswordDebilException {
         super(nombre, email, password, suscripcion);
-        this.descargasOffline = descargasOffline;
-        this.maxDescargas = maxDescargas;
+        this.descargasOffline = true;
+        this.maxDescargas = MAX_DESCARGAS_DEFAULT;
         this.descargados = new ArrayList<>();
-        this.calidadAudio = calidadAudio;
+        this.calidadAudio = "ALTA";
     }
 
 
@@ -68,7 +68,7 @@ public class UsuarioPremium extends Usuario {
     }
 
     //mertodos propios
-    public void descragar(Contenido contenido) throws LimiteDescargasException, ContenidoYaDescargadoException{
+    public void descargar(Contenido contenido) throws LimiteDescargasException, ContenidoYaDescargadoException{
         if(descargados.size() >= maxDescargas){
             throw new LimiteDescargasException("Has alcanzado el límite de descargas permitidas.");
         }
@@ -83,7 +83,6 @@ public class UsuarioPremium extends Usuario {
 
     }
 
-    //revisar esto
     public boolean verificarEspacioDescarga(){
         return descargados.size() < maxDescargas;
     }
@@ -102,11 +101,16 @@ public class UsuarioPremium extends Usuario {
 
     //Override del padre ver logica
 
-
     @Override
     public void reproducir(Contenido contenido) throws ContenidoNoDisponibleException, LimiteDiarioAlcanzadoException, AnuncioRequeridoException {
-
+        if (!contenido.isDisponible()) {
+            throw new ContenidoNoDisponibleException("El contenido no está disponible");
+        }
+        contenido.aumentarReproducciones();
+        agregarAlHistorial(contenido);
     }
+
+    //overide
 
     @Override
     public String toString() {

@@ -26,21 +26,17 @@ public class Artista {
         this.paisOrigen = paisOrigen;
         this.discografia = new ArrayList<>();
         this.albumes = new ArrayList<>();
-        this.oyentesMensuales = 0;
-        this.verificado = false;
-        this.biografia = null;
     }
 
-    public Artista(String id, String nombreArtistico, String nombreReal, String paisOrigen, boolean verificado, String biografia) {
-        this.id = id;
+    public Artista(String nombreArtistico, String nombreReal, String paisOrigen, boolean verificado, String biografia) {
+        this.id = UUID.randomUUID().toString();
         this.nombreArtistico = nombreArtistico;
         this.nombreReal = nombreReal;
         this.paisOrigen = paisOrigen;
-        this.discografia = new ArrayList<>();
-        this.albumes = new ArrayList<>();
-        this.oyentesMensuales = 0;
         this.verificado = verificado;
         this.biografia = biografia;
+        this.discografia = new ArrayList<>();
+        this.albumes = new ArrayList<>();
     }
 
 
@@ -170,6 +166,9 @@ public class Artista {
     public void incrementarOyentes() {
         oyentesMensuales++;
     }
+
+    //overrides
+
 
     @Override
     public String toString() {
