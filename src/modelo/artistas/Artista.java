@@ -39,6 +39,10 @@ public class Artista {
         this.albumes = new ArrayList<>();
     }
 
+    public Artista(String nombreReal) {
+        this.nombreReal = nombreReal;
+    }
+
 
     // Getters y Setters
 

@@ -4,7 +4,8 @@ public enum TipoSuscripcion {
     GRATUITO(0.0, false, 50, false),
     PREMIUM(9.99, true, -1, true),
     FAMILIAR(14.99, true, -1, true),
-    ESTUDIANTE(4.99, true, -1, true);
+    ESTUDIANTE(4.99, true, -1, true),
+    EMPRESARIAL(29.99, true, -1, true);
 
     private double precioMensual;
     private boolean sinAnuncios;

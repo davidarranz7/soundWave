@@ -61,6 +61,12 @@ public class Cancion extends Contenido implements Descargable, Reproducible {
         this.descargado = false;
     }
 
+    public Cancion(String titulo, int duracionSegundos, GeneroMusical genero) throws DuracionInvalidaException {
+        super(titulo, duracionSegundos);
+        this.letra = letra;
+        this.genero = genero;
+    }
+
     //getters y setters
 
     public String getLetra() {
