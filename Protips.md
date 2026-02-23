@@ -17,7 +17,8 @@ Descargas offline permitidas.
 Puede tener hasta 5 perfiles secundarios asociados.
 
 Debe poder consultar cuántos perfiles secundarios tiene creados.
-================================================================================================================================================
+
+=======================================================================================
 
 🟡 EJERCICIO 2 — Nuevo tipo de contenido: Audiolibro
 
@@ -77,7 +78,8 @@ Debe respetar la arquitectura orientada a objetos ya utilizada.
 
 No se puede duplicar código innecesariamente.
 
-=============================================================================================================================================================================
+========================================================================================
+
 🟠 EJERCICIO 3 — Nuevo tipo de Playlist: PlaylistColaborativa
 
 La empresa quiere lanzar una nueva funcionalidad para aumentar la interacción entre usuarios.
@@ -154,7 +156,7 @@ Número de contenidos
 
 ¿Reutilizas lógica de agregarContenido()?
 
-=========================================================================================================================================================================
+===================================================================================
 
 🧩 EJERCICIO 4 — UPDATE OFICIAL
 
@@ -194,8 +196,7 @@ Obtener el contenido más añadido a favoritos.
 
 Saber cuántos favoritos tiene cada contenido.
 
-
-=======================================================================================================================
+=======================================================================================
 
 🟢 EJERCICIO — MASTERCLASS
 
@@ -263,7 +264,7 @@ calcularDuracionMediaPorLeccion()
 getDificultad()
 esIntensivo()
 
-===========================================================================================================================================================================
+===============================================================
 
 🟢 EJERCICIO — MASTERCLASS
 
@@ -430,7 +431,7 @@ Cuando lo tengas hecho, me dices:
 
 Y ese test sí será más complejo.
 
-=====================================================================================================================================================================
+==================================================================================
 
 🟣 EJERCICIO 4 — Sistema de Suscripciones de Contenido Premium
 📌 ENUNCIADO (Formato examen real)
